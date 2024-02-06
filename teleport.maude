@@ -1,0 +1,15 @@
+load qc.maude
+
+fmod TELEPORT is
+    pr QC .
+
+    ops a b : -> Cpx .
+    op |psi> : -> Vect .
+
+    eq |psi> = a . |0> + b . |1> .
+endfm
+
+red (P0(1) x P0(0) x H(0) x CX(0, 1) x CX(1,2) x H(1)) x (|psi> (x) |0> (x) |0>) .
+red (Z(2) x P0(1) x P1(0) x H(0) x CX(0, 1) x CX(1,2) x H(1)) x (|psi> (x) |0> (x) |0>) .
+red (X(2) x P1(1) x P0(0) x H(0) x CX(0, 1) x CX(1,2) x H(1)) x (|psi> (x) |0> (x) |0>) .
+red (Z(2) x X(2) x P1(1) x P1(0) x H(0) x CX(0, 1) x CX(1,2) x H(1)) x (|psi> (x) |0> (x) |0>) .
