@@ -75,10 +75,6 @@ fmod MAT is
     eq SP(V, O) = 0 .
     eq SP(O, V) = 0 .
     eq SP(K1, K2) = if K1 == K2 then 1 else 0 fi .
-    --- eq SP(|0>, |0>) = 1 .
-    --- eq SP(|0>, |1>) = 0 .
-    --- eq SP(|1>, |0>) = 0 .
-    --- eq SP(|1>, |1>) = 1 .
     eq SP(C1 . V1, V2) = (C1)^* .* SP(V1, V2) .
     eq SP(V1, C2 . V2) = C2 .* SP(V1, V2) .
     eq SP(V1 + V2, V3) = SP(V1, V3) .+ SP(V2, V3) .
