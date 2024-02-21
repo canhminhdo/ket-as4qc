@@ -21,9 +21,6 @@ fmod REAL is
     --- absolute value
     op |_| : Real -> Real .
     op |_| : NzReal -> PosReal .
-    --- absolute square
-    op |_|^2 : Real -> Real .
-    op |_|^2 : NzReal -> PosReal .
     --- [todo] sqrt operator
     op sqrt : PosReal -> PosReal .
 
@@ -58,10 +55,6 @@ fmod REAL is
     eq | PR | = PR .
     eq | R1 .* R2 | = | R1 | .* | R2 | .
     eq | 1 ./ R' | = 1 ./ | R' | .
-    
-    *** absolute square
-    eq | R1 .* R2 |^2 = | R1 |^2 .* | R2 |^2 .
-    eq | 1 ./ R' |^2 = 1 ./ | R' |^2 .
     
     *** comparation for rational numbers
     eq Rt1 .< Rt2 = Rt1 < Rt2 .
