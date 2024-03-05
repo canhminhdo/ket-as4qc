@@ -60,8 +60,8 @@ fmod MAT is
     op (_)^+ : Vect -> Dual [prec 30] .
     op (_)^+ : Dual -> Vect [prec 30] .
     op (_)^+ : Mat -> Mat [prec 30] .
-    --- scalar product
-    op SP(_,_) : Vect Vect -> Cpx .
+    --- inner product
+    op IP(_,_) : Vect Vect -> Cpx .
 
     vars M M1 M2 M3 M4 : Mat .
     vars V V1 V2 V3 : Vect .
@@ -71,16 +71,16 @@ fmod MAT is
     vars B Bra : Bra .
     vars BN BN' BN1 BN2 BN3 BN4 : BNat .
 
-    --- scalar product
-    eq SP(V, O) = 0 .
-    eq SP(O, V) = 0 .
-    eq SP(K1, K2) = if K1 == K2 then 1 else 0 fi .
-    eq SP(C1 . V1, V2) = (C1)^* .* SP(V1, V2) .
-    eq SP(V1, C2 . V2) = C2 .* SP(V1, V2) .
-    eq SP(V1 + V2, V3) = SP(V1, V3) .+ SP(V2, V3) .
-    eq SP(V1, V2 + V3) = SP(V1, V2) .+ SP(V1, V3) .
-    eq SP(K1 (x) V1, K2 (x) V2) = SP(K1, K2) .* SP(V1, V2) .
-    eq (SP(V1, V2))^* = SP(V2, V1) .
+    --- inner product
+    eq IP(V, O) = 0 .
+    eq IP(O, V) = 0 .
+    eq IP(K1, K2) = if K1 == K2 then 1 else 0 fi .
+    eq IP(C1 . V1, V2) = (C1)^* .* IP(V1, V2) .
+    eq IP(V1, C2 . V2) = C2 .* IP(V1, V2) .
+    eq IP(V1 + V2, V3) = IP(V1, V3) .+ IP(V2, V3) .
+    eq IP(V1, V2 + V3) = IP(V1, V2) .+ IP(V1, V3) .
+    eq IP(K1 (x) V1, K2 (x) V2) = IP(K1, K2) .* IP(V1, V2) .
+    eq (IP(V1, V2))^* = IP(V2, V1) .
 
     --- zero vector
     eq [scalar-O1] : 0 . V = O .
