@@ -21,14 +21,14 @@ fmod MAT is
     pr CPX .
     pr DIRAC .
 
-    sorts ZeroV Vect ZeroD Dual ZeroM Mat .
+    sorts ZeroV Vect ZeroCV CoVect ZeroM Mat .
     subsorts ZeroV Ket < Vect .
     subsorts ZeroM < Mat .
-    subsorts ZeroD Bra < Dual .
+    subsorts ZeroCV Bra < CoVect .
 
-    --- zero vector, dual and matrix
+    --- zero vector, covector and matrix
     op O   : -> ZeroV [ctor] .
-    op O^+ : -> ZeroD [ctor] .
+    op O^+ : -> ZeroCV [ctor] .
     op mO  : -> ZeroM [ctor] .
     --- basic matrices
     ops |_><_| : BNat BNat -> Mat [ctor] .
@@ -42,30 +42,30 @@ fmod MAT is
     op I : -> Mat [ctor] .
     --- scalar multiplication with matrix
     op _._ : Cpx Vect -> Vect [prec 31] .
-    op _._ : Cpx Dual -> Dual [prec 31] .
+    op _._ : Cpx CoVect -> CoVect [prec 31] .
     op _._ : Cpx Mat -> Mat [prec 31] .
     --- matrix addition
     op _+_ : Vect Vect -> Vect [comm assoc prec 33] .
-    op _+_ : Dual Dual -> Dual [comm assoc prec 33] .
+    op _+_ : CoVect CoVect -> CoVect [comm assoc prec 33] .
     op _+_ : Mat Mat -> Mat [comm assoc prec 33] .
     --- matrix product
     op _x_ : Mat Vect -> Vect [prec 31] .
-    op _x_ : Vect Dual -> Mat [prec 31] .
+    op _x_ : Vect CoVect -> Mat [prec 31] .
     op _x_ : Mat Mat -> Mat [assoc prec 31] .
     --- tensor product
     op _(x)_ : Vect Vect -> Vect [assoc prec 31] .
-    op _(x)_ : Dual Dual -> Dual [assoc prec 31] .
+    op _(x)_ : CoVect CoVect -> CoVect [assoc prec 31] .
     op _(x)_ : Mat Mat -> Mat [assoc prec 31] .
     --- dagger
-    op (_)^+ : Vect -> Dual [prec 30] .
-    op (_)^+ : Dual -> Vect [prec 30] .
+    op (_)^+ : Vect -> CoVect [prec 30] .
+    op (_)^+ : CoVect -> Vect [prec 30] .
     op (_)^+ : Mat -> Mat [prec 30] .
     --- inner product
     op IP(_,_) : Vect Vect -> Cpx .
 
     vars M M1 M2 M3 M4 : Mat .
     vars V V1 V2 V3 : Vect .
-    vars D D1 D2 D3 : Dual .
+    vars CV CV1 CV2 CV3 : CoVect .
     vars C C1 C2 : Cpx .
     vars K K1 K2 : Ket .
     vars B Bra : Bra .
@@ -91,14 +91,14 @@ fmod MAT is
     eq [tensor-O1] : V (x) O = O .
     eq [tensor-O2] : O (x) V = O .
 
-    --- zero dual
-    eq [d-scalar-O1] : 0 . D = O^+ .
+    --- zero covector
+    eq [d-scalar-O1] : 0 . CV = O^+ .
     eq [d-scalar-O2] : C . O^+ = O^+ .
-    eq [d-add-O1] : O^+ + D = D .
+    eq [d-add-O1] : O^+ + CV = CV .
     eq [d-mul-O1] : V x O^+ = mO .
-    eq [d-mul-O2] : O x D = mO .
-    eq [d-tensor-O1] : D (x) O^+ = O^+ .
-    eq [d-tensor-O2] : O^+ (x) D = O^+ .
+    eq [d-mul-O2] : O x CV = mO .
+    eq [d-tensor-O1] : CV (x) O^+ = O^+ .
+    eq [d-tensor-O2] : O^+ (x) CV = O^+ .
 
     --- zero matrix
     eq [m-scalar-O1] : 0 . M = mO .
@@ -122,13 +122,13 @@ fmod MAT is
     eq [dagger-V6] : (V1 (x) V2)^+ = (V1)^+ (x) (V2)^+ .
     eq [dagger-V7] : ((V)^+)^+ = V .
 
-    eq [dagger-D1] : (O^+)^+ = O .
-    eq [dagger-D2] : (< 0 |)^+ = | 0 > .
-    eq [dagger-D3] : (< 1 |)^+ = | 1 > .
-    eq [dagger-D4] : (C . D)^+ = ((C)^*) . (D)^+ .
-    eq [dagger-D5] : (D1 + D2)^+ = (D1)^+ + (D2)^+ .
-    eq [dagger-D6] : (D1 (x) D2)^+ = (D1)^+ (x) (D2)^+ .
-    eq [dagger-D7] : ((D)^+)^+ = D .
+    eq [dagger-CV1] : (O^+)^+ = O .
+    eq [dagger-CV2] : (< 0 |)^+ = | 0 > .
+    eq [dagger-CV3] : (< 1 |)^+ = | 1 > .
+    eq [dagger-CV4] : (C . CV)^+ = ((C)^*) . (CV)^+ .
+    eq [dagger-CV5] : (CV1 + CV2)^+ = (CV1)^+ + (CV2)^+ .
+    eq [dagger-CV6] : (CV1 (x) CV2)^+ = (CV1)^+ (x) (CV2)^+ .
+    eq [dagger-CV7] : ((CV)^+)^+ = CV .
     
     eq [dagger-M1] : (mO)^+ = mO .
     eq [dagger-M2] : (I)^+ = I .
@@ -143,8 +143,8 @@ fmod MAT is
     eq [dist-mul-V1] : M x (V1 + V2) = M x V1 + M x V2 .
     eq [dist-mul-V2] : (M1 + M2) x V = M1 x V + M2 x V .
     
-    eq [dist-mul-D1] : V x (D1 + D2) = V x D1 + V x D2 .
-    eq [dist-mul-D2] : (V1 + V2) x D = V1 x D + V2 x D .
+    eq [dist-mul-CV1] : V x (CV1 + CV2) = V x CV1 + V x CV2 .
+    eq [dist-mul-CV2] : (V1 + V2) x CV = V1 x CV + V2 x CV .
 
     eq [dist-mul-M1] : M1 x (M2 + M3) = M1 x M2 + M1 x M3 .
     eq [dist-mul-M2] : (M1 + M2) x M3 = M1 x M3 + M2 x M3 .
@@ -154,9 +154,9 @@ fmod MAT is
     eq [scalar-V2] : C1 . (C2 . V) = (C1 .* C2) . V .
     eq [scalar-V3] : C . (V1 + V2) = C . V1 + C . V2 .
 
-    eq [scalar-D1] : 1 . D = D .
-    eq [scalar-D2] : C1 . (C2 . D) = (C1 .* C2) . D .
-    eq [scalar-D3] : C . (D1 + D2) = C . D1 + C . D2 .
+    eq [scalar-CV1] : 1 . CV = CV .
+    eq [scalar-CV2] : C1 . (C2 . CV) = (C1 .* C2) . CV .
+    eq [scalar-CV3] : C . (CV1 + CV2) = C . CV1 + C . CV2 .
 
     eq [scalar-M1] : 1 . M = M .
     eq [scalar-M2] : C1 . (C2 . M) = (C1 .* C2) . M .
@@ -167,9 +167,9 @@ fmod MAT is
     eq [add-V2] : (C . V) + V = (C .+ 1) . V .
     eq [add-V3] : (C1 . V) + (C2 . V) = (C1 .+ C2) . V .
     
-    eq [add-D1] : D + D = 2 . D .
-    eq [add-D2] : (C . D) + D = (C .+ 1) . D .
-    eq [add-D3] : (C1 . D) + (C2 . D) = (C1 .+ C2) . D .
+    eq [add-CV1] : CV + CV = 2 . CV .
+    eq [add-CV2] : (C . CV) + CV = (C .+ 1) . CV .
+    eq [add-CV3] : (C1 . CV) + (C2 . CV) = (C1 .+ C2) . CV .
 
     eq [add-M1] : M + M = 2 . M .
     eq [add-M2] : (C . M) + M = (C .+ 1) . M .
@@ -183,10 +183,10 @@ fmod MAT is
     eq [mul-MV5] : I x | BN > = | BN > .
     eq [mul-MV6] : (M1 x M2) x V = M1 x (M2 x V) .
 
-    eq [mul-VD1] : (C . V) x D = C . (V x D) .
-    eq [mul-VD2] : V x (C . D) = C . (V x D) .
-    eq [mul-VD3] : (K (x) V) x (B (x) D) = (K x B) (x) (V x D) .
-    eq [mul-VD4] : | BN > x < BN' | = | BN >< BN' | .
+    eq [mul-VCV1] : (C . V) x CV = C . (V x CV) .
+    eq [mul-VCV2] : V x (C . CV) = C . (V x CV) .
+    eq [mul-VCV3] : (K (x) V) x (B (x) CV) = (K x B) (x) (V x CV) .
+    eq [mul-VCV4] : | BN > x < BN' | = | BN >< BN' | .
 
     eq [mul-MM1] : (C . M1) x M2 = C . (M1 x M2) .
     eq [mul-MM2] : M1 x (C . M2) = C . (M1 x M2) .
@@ -197,8 +197,8 @@ fmod MAT is
     eq [tensor-V1] : (C . V1) (x) V2 = C . (V1 (x) V2) .
     eq [tensor-V2] : V1 (x) (C . V2) = C . (V1 (x) V2) .
 
-    eq [tensor-D1] : (C . D1) (x) D2 = C . (D1 (x) D2) .
-    eq [tensor-D2] : D1 (x) (C . D2) = C . (D1 (x) D2) .
+    eq [tensor-CV1] : (C . CV1) (x) CV2 = C . (CV1 (x) CV2) .
+    eq [tensor-CV2] : CV1 (x) (C . CV2) = C . (CV1 (x) CV2) .
     
     eq [tensor-M1] : (C . M1) (x) M2 = C . (M1 (x) M2) .
     eq [tensor-M2] : M1 (x) (C . M2) = C . (M1 (x) M2) .
@@ -207,8 +207,8 @@ fmod MAT is
     eq [dist-tensor-V1] : V1 (x) (V2 + V3) = V1 (x) V2 + V1 (x) V3 .
     eq [dist-tensor-V2] : (V1 + V2) (x) V3 = V1 (x) V3 + V2 (x) V3 .
 
-    eq [dist-tensor-D1] : D1 (x) (D2 + D3) = D1 (x) D2 + D1 (x) D3 .
-    eq [dist-tensor-D2] : (D1 + D2) (x) D3 = D1 (x) D3 + D2 (x) D3 .
+    eq [dist-tensor-CV1] : CV1 (x) (CV2 + CV3) = CV1 (x) CV2 + CV1 (x) CV3 .
+    eq [dist-tensor-CV2] : (CV1 + CV2) (x) CV3 = CV1 (x) CV3 + CV2 (x) CV3 .
 
     eq [dist-tensor-M1] : M1 (x) (M2 + M3) = M1 (x) M2 + M1 (x) M3 .
     eq [dist-tensor-M2] : (M1 + M2) (x) M3 = M1 (x) M3 + M2 (x) M3 .
