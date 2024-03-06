@@ -5,6 +5,7 @@ fmod DIRAC is
 
     --- basis vectors
     ops |0> |1> : -> Ket [ctor] .
+    --- basis covectors
     ops <0| <1| : -> Bra [ctor] .
 endfm
 
