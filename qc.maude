@@ -1,20 +1,11 @@
 load cpx.maude
 
 fmod DIRAC is
-    sorts BNat Ket Bra .
+    sorts Ket Bra .
 
-    ops 0 1 : -> BNat [ctor] .
     --- basis vectors
-    op |_> : BNat -> Ket [ctor] .
-    op <_| : BNat -> Bra [ctor] .
-    
-    --- abbreviations for basis vectors
-    ops |0> |1> : -> Ket .
-    ops <0| <1| : -> Bra .
-    eq |0> = | 0 > .
-    eq |1> = | 1 > .
-    eq <0| = < 0 | .
-    eq <1| = < 1 | .
+    ops |0> |1> : -> Ket [ctor] .
+    ops <0| <1| : -> Bra [ctor] .
 endfm
 
 fmod MAT is
@@ -30,14 +21,12 @@ fmod MAT is
     op O   : -> ZeroV [ctor] .
     op O^+ : -> ZeroCV [ctor] .
     op mO  : -> ZeroM [ctor] .
-    --- basic matrices
-    ops |_><_| : BNat BNat -> Mat [ctor] .
     --- abbreviations for basic matrices
     ops |0><0| |0><1| |1><0| |1><1| : -> Mat .
-    eq |0><0| = | 0 >< 0 | .
-    eq |0><1| = | 0 >< 1 | .
-    eq |1><0| = | 1 >< 0 | .
-    eq |1><1| = | 1 >< 1 | .
+    eq |0><0| = |0> x <0| .
+    eq |0><1| = |0> x <1| .
+    eq |1><0| = |1> x <0| .
+    eq |1><1| = |1> x <1| .
     --- identity matrix
     op I : -> Mat [ctor] .
     --- scalar multiplication with matrix
@@ -61,26 +50,25 @@ fmod MAT is
     op (_)^+ : CoVect -> Vect [prec 30] .
     op (_)^+ : Mat -> Mat [prec 30] .
     --- inner product
-    op IP(_,_) : Vect Vect -> Cpx .
+    op <_,_> : Vect Vect -> Cpx .
 
     vars M M1 M2 M3 M4 : Mat .
     vars V V1 V2 V3 : Vect .
     vars CV CV1 CV2 CV3 : CoVect .
     vars C C1 C2 : Cpx .
     vars K K1 K2 : Ket .
-    vars B Bra : Bra .
-    vars BN BN' BN1 BN2 BN3 BN4 : BNat .
+    vars B B1 B2 : Bra .
 
     --- inner product
-    eq IP(V, O) = 0 .
-    eq IP(O, V) = 0 .
-    eq IP(K1, K2) = if K1 == K2 then 1 else 0 fi .
-    eq IP(C1 . V1, V2) = (C1)^* .* IP(V1, V2) .
-    eq IP(V1, C2 . V2) = C2 .* IP(V1, V2) .
-    eq IP(V1 + V2, V3) = IP(V1, V3) .+ IP(V2, V3) .
-    eq IP(V1, V2 + V3) = IP(V1, V2) .+ IP(V1, V3) .
-    eq IP(K1 (x) V1, K2 (x) V2) = IP(K1, K2) .* IP(V1, V2) .
-    eq (IP(V1, V2))^* = IP(V2, V1) .
+    eq < V, O > = 0 .
+    eq < O, V > = 0 .
+    eq < K1, K2 > = if K1 == K2 then 1 else 0 fi .
+    eq < C1 . V1, V2 > = (C1)^* .* < V1, V2 > .
+    eq < V1, C2 . V2 > = C2 .* < V1, V2 > .
+    eq < V1 + V2, V3 > = < V1, V3 > .+ < V2, V3 > .
+    eq < V1, V2 + V3 > = < V1, V2 > .+ < V1, V3 > .
+    eq < K1 (x) V1, K2 (x) V2 > = < K1, K2 > .* < V1, V2 > .
+    eq (< V1, V2 >)^* = < V2, V1 > .
 
     --- zero vector
     eq [scalar-O1] : 0 . V = O .
@@ -115,16 +103,16 @@ fmod MAT is
 
     --- dagger properties
     eq [dagger-V1] : (O)^+ = O^+ .
-    eq [dagger-V2] : (| 0 >)^+ = < 0 | .
-    eq [dagger-V3] : (| 1 >)^+ = < 1 | .
+    eq [dagger-V2] : (|0>)^+ = <0| .
+    eq [dagger-V3] : (|1>)^+ = <1| .
     eq [dagger-V4] : (C . V)^+ = ((C)^*) . (V)^+ .
     eq [dagger-V5] : (V1 + V2)^+ = (V1)^+ + (V2)^+ .
     eq [dagger-V6] : (V1 (x) V2)^+ = (V1)^+ (x) (V2)^+ .
     eq [dagger-V7] : ((V)^+)^+ = V .
 
     eq [dagger-CV1] : (O^+)^+ = O .
-    eq [dagger-CV2] : (< 0 |)^+ = | 0 > .
-    eq [dagger-CV3] : (< 1 |)^+ = | 1 > .
+    eq [dagger-CV2] : (<0|)^+ = |0> .
+    eq [dagger-CV3] : (<1|)^+ = |1> .
     eq [dagger-CV4] : (C . CV)^+ = ((C)^*) . (CV)^+ .
     eq [dagger-CV5] : (CV1 + CV2)^+ = (CV1)^+ + (CV2)^+ .
     eq [dagger-CV6] : (CV1 (x) CV2)^+ = (CV1)^+ (x) (CV2)^+ .
@@ -132,7 +120,7 @@ fmod MAT is
     
     eq [dagger-M1] : (mO)^+ = mO .
     eq [dagger-M2] : (I)^+ = I .
-    eq [dagger-M3] : (| BN >< BN' |)^+ = | BN' >< BN | .
+    eq [dagger-M3] : (K x B)^+ =  (B)^+ x (K)^+ .
     eq [dagger-M4] : (C . M)^+ = ((C)^*) . (M)^+ .
     eq [dagger-M5] : (M1 + M2)^+ = (M1)^+ + (M2)^+ .
     eq [dagger-M6] : (M1 x M2)^+ = (M2)^+ x (M1)^+ .
@@ -179,18 +167,17 @@ fmod MAT is
     eq [mul-MV1] : (C . M) x V = C . (M x V) .
     eq [mul-MV2] : M x (C . V) = C . (M x V) .
     eq [mul-MV3] : (M1 (x) M2) x (V1 (x) V2) = (M1 x V1) (x) (M2 x V2) .
-    eq [mul-MV4] : | BN1 >< BN2 | x | BN3 > = if BN2 == BN3 then | BN1 > else O fi .
-    eq [mul-MV5] : I x | BN > = | BN > .
+    eq [mul-MV4] : (K1 x B) x K2 = < (B)^+, K2 > . K1 .
+    eq [mul-MV5] : I x K = K .
     eq [mul-MV6] : (M1 x M2) x V = M1 x (M2 x V) .
 
     eq [mul-VCV1] : (C . V) x CV = C . (V x CV) .
-    eq [mul-VCV2] : V x (C . CV) = C . (V x CV) .
+    eq [mul-VCV2] : V x (C . CV) = C . (V x CV) .   
     eq [mul-VCV3] : (K (x) V) x (B (x) CV) = (K x B) (x) (V x CV) .
-    eq [mul-VCV4] : | BN > x < BN' | = | BN >< BN' | .
 
     eq [mul-MM1] : (C . M1) x M2 = C . (M1 x M2) .
     eq [mul-MM2] : M1 x (C . M2) = C . (M1 x M2) .
-    eq [mul-MM3] : | BN1 >< BN2 | x | BN3 >< BN4 | = if BN2 == BN3 then | BN1 >< BN4 | else mO fi .
+    eq [mul-MM3] : (K1 x B1) x (K2 x B2) = < (B1)^+, K2 > . (K1 x B2) .
     eq [mul-MM4] : (M1 (x) M2) x (M3 (x) M4) = (M1 x M3) (x) (M2 x M4) .
     
     --- tensor product normal forms
@@ -225,16 +212,16 @@ fmod QC is
     vars N N1 N2 N3 : Nat .
     vars V V1 V2 : Vect .
     vars M M1 M2 : Mat .
-    vars BN BN' : BNat .
+    vars K : Ket .
+    vars B : Bra .
     vars C : Cpx .
-    vars P : Real .
 
     eq  [I1] : I x V = V .
     eq  [I2] : I(0) (x) M = M .
     eq  [I3] : M (x) I(0) = M .
     ceq [I4] : I(N) = I (x) I(N - 1) if N > 0 .
 
-    eq  [size1.1]  : size(| BN >) = 1 .
+    eq  [size1.1]  : size(K) = 1 .
     eq  [size1.2]  : size(C . V) = size(V) .
     ceq [size1.3]  : size(V1 + V2) = size(V1) if size(V1) == size(V2) .
     ceq [size1.3E] : size(V1 + V2) = errNat if size(V1) =/= size(V2) .
@@ -242,7 +229,7 @@ fmod QC is
     ceq [size1.4E] : size(M x V) = errNat if size(M) =/= size(V) .
     eq  [size1.5]  : size(V1 (x) V2) = size(V1) + size(V2) .
 
-    eq  [size2.1]  : size(| BN >< BN' |) = 1 .
+    eq  [size2.1]  : size(K x B) = 1 .
     eq  [size2.2]  : size(C . M) = size(M) .
     ceq [size2.3]  : size(M1 + M2) = size(M1) if size(M1) == size(M2) .
     ceq [size2.3E] : size(M1 + M2) = errNat if size(M1) =/= size(M2) .
