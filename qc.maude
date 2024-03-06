@@ -115,16 +115,16 @@ fmod MAT is
 
     --- dagger properties
     eq [dagger-V1] : (O)^+ = O^+ .
-    eq [dagger-V2] : (|0>)^+ = <0| .
-    eq [dagger-V3] : (|1>)^+ = <1| .
+    eq [dagger-V2] : (| 0 >)^+ = < 0 | .
+    eq [dagger-V3] : (| 1 >)^+ = < 1 | .
     eq [dagger-V4] : (C . V)^+ = ((C)^*) . (V)^+ .
     eq [dagger-V5] : (V1 + V2)^+ = (V1)^+ + (V2)^+ .
     eq [dagger-V6] : (V1 (x) V2)^+ = (V1)^+ (x) (V2)^+ .
     eq [dagger-V7] : ((V)^+)^+ = V .
 
     eq [dagger-D1] : (O^+)^+ = O .
-    eq [dagger-D2] : (<0|)^+ = |0> .
-    eq [dagger-D3] : (<1|)^+ = |1> .
+    eq [dagger-D2] : (< 0 |)^+ = | 0 > .
+    eq [dagger-D3] : (< 1 |)^+ = | 1 > .
     eq [dagger-D4] : (C . D)^+ = ((C)^*) . (D)^+ .
     eq [dagger-D5] : (D1 + D2)^+ = (D1)^+ + (D2)^+ .
     eq [dagger-D6] : (D1 (x) D2)^+ = (D1)^+ (x) (D2)^+ .
