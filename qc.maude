@@ -167,7 +167,7 @@ fmod MAT is
     --- multiplicative normal forms
     eq [mul-MV1] : (C . M) x V = C . (M x V) .
     eq [mul-MV2] : M x (C . V) = C . (M x V) .
-    --- eq [mul-MV3] : (M1 (x) M2) x (V1 (x) V2) = (M1 x V1) (x) (M2 x V2) .
+    --- eq [mul-MV3] : (M1 (x) M2) x (V1 (x) V2) = (M1 x V1) (x) (M2 x V2) [nonexec] .
     eq [mul-MV3-1] : ((K1 x B1) (x) M2) x (K2 (x) V2) = ((K1 x B1) x K2) (x) (M2 x V2) .
     eq [mul-MV3-2] : (I (x) M2) x (K2 (x) V2) = K2 (x) (M2 x V2) .
     eq [mul-MV4] : (K1 x B1) x K2 = < (B1)^+, K2 > . K1 .
