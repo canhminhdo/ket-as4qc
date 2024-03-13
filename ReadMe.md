@@ -16,6 +16,12 @@ For example, we can type the following command in CLI in order to see how Quantu
 maude teleport.maude
 ```
 
+- For testing, we can test the algebraic speicfication with some test cases provided as follows:
+
+```console
+cd test && ./tester
+```
+
 ## Repository structure
 - `cpx.maude` for complex number reasoning.
 

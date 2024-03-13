@@ -1,0 +1,6 @@
+#!/bin/sh
+
+echo "--> Testing QC"
+maude < qc-test.maude -no-banner -no-advise | sed -r '/^(rewrites:|Solution|states:)/d' > qc-test.out
+diff qc-test.expected qc-test.out
+rm qc-test.out

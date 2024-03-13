@@ -167,8 +167,8 @@ fmod MAT is
     --- multiplicative normal forms
     eq [mul-MV1] : (C . M) x V = C . (M x V) .
     eq [mul-MV2] : M x (C . V) = C . (M x V) .
-    eq [mul-MV3] : (M1 (x) M2) x (V1 (x) V2) = (M1 x V1) (x) (M2 x V2) .
-    eq [mul-MV4] : (K1 x B) x K2 = < (B)^+, K2 > . K1 .
+    eq [mul-MV3] : ((K1 x B1) (x) M2) x (K2 (x) V2) = ((K1 x B1) x K2) (x) (M2 x V2) .
+    eq [mul-MV4] : (K1 x B1) x K2 = < (B1)^+, K2 > . K1 .
     eq [mul-MV5] : I x K = K .
     eq [mul-MV6] : (M1 x M2) x V = M1 x (M2 x V) .
 
@@ -179,7 +179,8 @@ fmod MAT is
     eq [mul-MM1] : (C . M1) x M2 = C . (M1 x M2) .
     eq [mul-MM2] : M1 x (C . M2) = C . (M1 x M2) .
     eq [mul-MM3] : (K1 x B1) x (K2 x B2) = < (B1)^+, K2 > . (K1 x B2) .
-    eq [mul-MM4] : (M1 (x) M2) x (M3 (x) M4) = (M1 x M3) (x) (M2 x M4) .
+    --- eq [mul-MM4] : (M1 (x) M2) x (M3 (x) M4) = (M1 x M3) (x) (M2 x M4) [nonexec] .
+    eq [mul-MM4] : ((K1 x B1) (x) M1) x ((K2 x B2) (x) M2) = ((K1 x B1) x (K2 x B2)) (x) (M1 x M2) .
     
     --- tensor product normal forms
     eq [tensor-V1] : (C . V1) (x) V2 = C . (V1 (x) V2) .

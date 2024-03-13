@@ -1,0 +1,7 @@
+#!/bin/sh
+
+echo "--> Testing Teleport"
+DIR=test
+cd ../ && maude < teleport.maude -no-banner -no-advise | sed -r '/^(rewrites:|Solution|states:)/d' > $DIR/teleport.out
+diff $DIR/teleport.expected $DIR/teleport.out
+rm $DIR/teleport.out

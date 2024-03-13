@@ -1,0 +1,112 @@
+==========================================
+reduce in TELEPORT : (P0(1) x P0(0) x H(0) x CX(0, 1) x CX(1, 2) x H(1)) x
+    |psi>(x)|0>(x)|0> .
+result [Vect]: a . P0(1) x P0(0) x H(0) x CX(0, 1) x ((-1 .* 1 ./ sqrt(2)) . (
+    P1(1) x ((I(x)I(x)|0> x <1| + I(x)I(x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(
+    |1> x <1|)(x)I) x |0>(x)|0>(x)|0> + (I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(
+    x)(|1> x <1|)(x)I) x |0>(x)|0>(x)|0>) + (1 ./ sqrt(2)) . (P1(1) x ((I(x)I(
+    x)|0> x <1| + I(x)I(x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(|0> x <0|)(x)I) x
+    |0>(x)|0>(x)|0> + (I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(x)(|0> x <0|)(x)I)
+    x |0>(x)|0>(x)|0>) + (1 ./ sqrt(2)) . (P1(1) x ((I(x)I(x)|0> x <1| + I(x)I(
+    x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(|0> x <1|)(x)I) x |0>(x)|0>(x)|0> + (
+    I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(x)(|0> x <1|)(x)I) x |0>(x)|0>(x)|0>)
+    + (1 ./ sqrt(2)) . (P1(1) x ((I(x)I(x)|0> x <1| + I(x)I(x)|1> x <0|)(x)I(
+    errNat - 3)) x (I(x)(|1> x <0|)(x)I) x |0>(x)|0>(x)|0> + (I(x)(|0> x <0|)(
+    x)I(errNat - 2)) x (I(x)(|1> x <0|)(x)I) x |0>(x)|0>(x)|0>)) + b . P0(1) x
+    P0(0) x H(0) x CX(0, 1) x ((-1 .* 1 ./ sqrt(2)) . (P1(1) x ((I(x)I(x)|0> x
+    <1| + I(x)I(x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(|1> x <1|)(x)I) x |1>(
+    x)|0>(x)|0> + (I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(x)(|1> x <1|)(x)I) x
+    |1>(x)|0>(x)|0>) + (1 ./ sqrt(2)) . (P1(1) x ((I(x)I(x)|0> x <1| + I(x)I(
+    x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(|0> x <0|)(x)I) x |1>(x)|0>(x)|0> + (
+    I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(x)(|0> x <0|)(x)I) x |1>(x)|0>(x)|0>)
+    + (1 ./ sqrt(2)) . (P1(1) x ((I(x)I(x)|0> x <1| + I(x)I(x)|1> x <0|)(x)I(
+    errNat - 3)) x (I(x)(|0> x <1|)(x)I) x |1>(x)|0>(x)|0> + (I(x)(|0> x <0|)(
+    x)I(errNat - 2)) x (I(x)(|0> x <1|)(x)I) x |1>(x)|0>(x)|0>) + (1 ./ sqrt(
+    2)) . (P1(1) x ((I(x)I(x)|0> x <1| + I(x)I(x)|1> x <0|)(x)I(errNat - 3)) x
+    (I(x)(|1> x <0|)(x)I) x |1>(x)|0>(x)|0> + (I(x)(|0> x <0|)(x)I(errNat - 2))
+    x (I(x)(|1> x <0|)(x)I) x |1>(x)|0>(x)|0>))
+==========================================
+reduce in TELEPORT : (Z(2) x P0(1) x P1(0) x H(0) x CX(0, 1) x CX(1, 2) x H(1))
+    x |psi>(x)|0>(x)|0> .
+result [Vect]: a . Z(2) x P0(1) x P1(0) x H(0) x CX(0, 1) x ((-1 .* 1 ./ sqrt(
+    2)) . (P1(1) x ((I(x)I(x)|0> x <1| + I(x)I(x)|1> x <0|)(x)I(errNat - 3)) x
+    (I(x)(|1> x <1|)(x)I) x |0>(x)|0>(x)|0> + (I(x)(|0> x <0|)(x)I(errNat - 2))
+    x (I(x)(|1> x <1|)(x)I) x |0>(x)|0>(x)|0>) + (1 ./ sqrt(2)) . (P1(1) x ((I(
+    x)I(x)|0> x <1| + I(x)I(x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(|0> x <0|)(
+    x)I) x |0>(x)|0>(x)|0> + (I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(x)(|0> x
+    <0|)(x)I) x |0>(x)|0>(x)|0>) + (1 ./ sqrt(2)) . (P1(1) x ((I(x)I(x)|0> x
+    <1| + I(x)I(x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(|0> x <1|)(x)I) x |0>(
+    x)|0>(x)|0> + (I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(x)(|0> x <1|)(x)I) x
+    |0>(x)|0>(x)|0>) + (1 ./ sqrt(2)) . (P1(1) x ((I(x)I(x)|0> x <1| + I(x)I(
+    x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(|1> x <0|)(x)I) x |0>(x)|0>(x)|0> + (
+    I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(x)(|1> x <0|)(x)I) x |0>(x)|0>(
+    x)|0>)) + b . Z(2) x P0(1) x P1(0) x H(0) x CX(0, 1) x ((-1 .* 1 ./ sqrt(
+    2)) . (P1(1) x ((I(x)I(x)|0> x <1| + I(x)I(x)|1> x <0|)(x)I(errNat - 3)) x
+    (I(x)(|1> x <1|)(x)I) x |1>(x)|0>(x)|0> + (I(x)(|0> x <0|)(x)I(errNat - 2))
+    x (I(x)(|1> x <1|)(x)I) x |1>(x)|0>(x)|0>) + (1 ./ sqrt(2)) . (P1(1) x ((I(
+    x)I(x)|0> x <1| + I(x)I(x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(|0> x <0|)(
+    x)I) x |1>(x)|0>(x)|0> + (I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(x)(|0> x
+    <0|)(x)I) x |1>(x)|0>(x)|0>) + (1 ./ sqrt(2)) . (P1(1) x ((I(x)I(x)|0> x
+    <1| + I(x)I(x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(|0> x <1|)(x)I) x |1>(
+    x)|0>(x)|0> + (I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(x)(|0> x <1|)(x)I) x
+    |1>(x)|0>(x)|0>) + (1 ./ sqrt(2)) . (P1(1) x ((I(x)I(x)|0> x <1| + I(x)I(
+    x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(|1> x <0|)(x)I) x |1>(x)|0>(x)|0> + (
+    I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(x)(|1> x <0|)(x)I) x |1>(x)|0>(
+    x)|0>))
+==========================================
+reduce in TELEPORT : (X(2) x P1(1) x P0(0) x H(0) x CX(0, 1) x CX(1, 2) x H(1))
+    x |psi>(x)|0>(x)|0> .
+result [Vect]: a . X(2) x P1(1) x P0(0) x H(0) x CX(0, 1) x ((-1 .* 1 ./ sqrt(
+    2)) . (P1(1) x ((I(x)I(x)|0> x <1| + I(x)I(x)|1> x <0|)(x)I(errNat - 3)) x
+    (I(x)(|1> x <1|)(x)I) x |0>(x)|0>(x)|0> + (I(x)(|0> x <0|)(x)I(errNat - 2))
+    x (I(x)(|1> x <1|)(x)I) x |0>(x)|0>(x)|0>) + (1 ./ sqrt(2)) . (P1(1) x ((I(
+    x)I(x)|0> x <1| + I(x)I(x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(|0> x <0|)(
+    x)I) x |0>(x)|0>(x)|0> + (I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(x)(|0> x
+    <0|)(x)I) x |0>(x)|0>(x)|0>) + (1 ./ sqrt(2)) . (P1(1) x ((I(x)I(x)|0> x
+    <1| + I(x)I(x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(|0> x <1|)(x)I) x |0>(
+    x)|0>(x)|0> + (I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(x)(|0> x <1|)(x)I) x
+    |0>(x)|0>(x)|0>) + (1 ./ sqrt(2)) . (P1(1) x ((I(x)I(x)|0> x <1| + I(x)I(
+    x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(|1> x <0|)(x)I) x |0>(x)|0>(x)|0> + (
+    I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(x)(|1> x <0|)(x)I) x |0>(x)|0>(
+    x)|0>)) + b . X(2) x P1(1) x P0(0) x H(0) x CX(0, 1) x ((-1 .* 1 ./ sqrt(
+    2)) . (P1(1) x ((I(x)I(x)|0> x <1| + I(x)I(x)|1> x <0|)(x)I(errNat - 3)) x
+    (I(x)(|1> x <1|)(x)I) x |1>(x)|0>(x)|0> + (I(x)(|0> x <0|)(x)I(errNat - 2))
+    x (I(x)(|1> x <1|)(x)I) x |1>(x)|0>(x)|0>) + (1 ./ sqrt(2)) . (P1(1) x ((I(
+    x)I(x)|0> x <1| + I(x)I(x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(|0> x <0|)(
+    x)I) x |1>(x)|0>(x)|0> + (I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(x)(|0> x
+    <0|)(x)I) x |1>(x)|0>(x)|0>) + (1 ./ sqrt(2)) . (P1(1) x ((I(x)I(x)|0> x
+    <1| + I(x)I(x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(|0> x <1|)(x)I) x |1>(
+    x)|0>(x)|0> + (I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(x)(|0> x <1|)(x)I) x
+    |1>(x)|0>(x)|0>) + (1 ./ sqrt(2)) . (P1(1) x ((I(x)I(x)|0> x <1| + I(x)I(
+    x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(|1> x <0|)(x)I) x |1>(x)|0>(x)|0> + (
+    I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(x)(|1> x <0|)(x)I) x |1>(x)|0>(
+    x)|0>))
+==========================================
+reduce in TELEPORT : (Z(2) x X(2) x P1(1) x P1(0) x H(0) x CX(0, 1) x CX(1, 2)
+    x H(1)) x |psi>(x)|0>(x)|0> .
+result [Vect]: a . Z(2) x X(2) x P1(1) x P1(0) x H(0) x CX(0, 1) x ((-1 .* 1 ./
+    sqrt(2)) . (P1(1) x ((I(x)I(x)|0> x <1| + I(x)I(x)|1> x <0|)(x)I(errNat -
+    3)) x (I(x)(|1> x <1|)(x)I) x |0>(x)|0>(x)|0> + (I(x)(|0> x <0|)(x)I(errNat
+    - 2)) x (I(x)(|1> x <1|)(x)I) x |0>(x)|0>(x)|0>) + (1 ./ sqrt(2)) . (P1(1)
+    x ((I(x)I(x)|0> x <1| + I(x)I(x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(|0> x
+    <0|)(x)I) x |0>(x)|0>(x)|0> + (I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(x)(|0>
+    x <0|)(x)I) x |0>(x)|0>(x)|0>) + (1 ./ sqrt(2)) . (P1(1) x ((I(x)I(x)|0> x
+    <1| + I(x)I(x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(|0> x <1|)(x)I) x |0>(
+    x)|0>(x)|0> + (I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(x)(|0> x <1|)(x)I) x
+    |0>(x)|0>(x)|0>) + (1 ./ sqrt(2)) . (P1(1) x ((I(x)I(x)|0> x <1| + I(x)I(
+    x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(|1> x <0|)(x)I) x |0>(x)|0>(x)|0> + (
+    I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(x)(|1> x <0|)(x)I) x |0>(x)|0>(
+    x)|0>)) + b . Z(2) x X(2) x P1(1) x P1(0) x H(0) x CX(0, 1) x ((-1 .* 1 ./
+    sqrt(2)) . (P1(1) x ((I(x)I(x)|0> x <1| + I(x)I(x)|1> x <0|)(x)I(errNat -
+    3)) x (I(x)(|1> x <1|)(x)I) x |1>(x)|0>(x)|0> + (I(x)(|0> x <0|)(x)I(errNat
+    - 2)) x (I(x)(|1> x <1|)(x)I) x |1>(x)|0>(x)|0>) + (1 ./ sqrt(2)) . (P1(1)
+    x ((I(x)I(x)|0> x <1| + I(x)I(x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(|0> x
+    <0|)(x)I) x |1>(x)|0>(x)|0> + (I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(x)(|0>
+    x <0|)(x)I) x |1>(x)|0>(x)|0>) + (1 ./ sqrt(2)) . (P1(1) x ((I(x)I(x)|0> x
+    <1| + I(x)I(x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(|0> x <1|)(x)I) x |1>(
+    x)|0>(x)|0> + (I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(x)(|0> x <1|)(x)I) x
+    |1>(x)|0>(x)|0>) + (1 ./ sqrt(2)) . (P1(1) x ((I(x)I(x)|0> x <1| + I(x)I(
+    x)|1> x <0|)(x)I(errNat - 3)) x (I(x)(|1> x <0|)(x)I) x |1>(x)|0>(x)|0> + (
+    I(x)(|0> x <0|)(x)I(errNat - 2)) x (I(x)(|1> x <0|)(x)I) x |1>(x)|0>(
+    x)|0>))
+Bye.
