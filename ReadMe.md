@@ -1,6 +1,6 @@
 ### An Algebraic Specification for Quantum Computation in Maude
 ---
-This repository presents an algebraic specification for quantum computation in Maude.
+This repository presents an <u>A</u>lgebraic <u>S</u>pecification for <u>Q</u>quantum <u>C</u>omputation called |AS4QC> which was developed in Maude.
 
 ## Dependencies
 - Maude is a programming/specification language based on rewriting logic. How to download and install Maude can be found at [here](http://maude.cs.illinois.edu/w/index.php/The_Maude_System).
