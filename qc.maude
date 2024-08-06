@@ -52,6 +52,8 @@ fmod MAT is
     op (_)^+ : Mat -> Mat [prec 30] .
     --- inner product
     op <_,_> : Vect Vect -> Cpx .
+    --- norm square
+    op ||_||^2 : Vect -> Cpx .
 
     vars M M1 M2 M3 M4 : Mat .
     vars V V1 V2 V3 : Vect .
@@ -59,6 +61,9 @@ fmod MAT is
     vars C C1 C2 : Cpx .
     vars K K1 K2 : Ket .
     vars B B1 B2 : Bra .
+
+    --- norm square
+    eq || V ||^2 = < V, V > .
 
     --- inner product
     eq < V, O > = 0 .
