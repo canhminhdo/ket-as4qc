@@ -245,13 +245,14 @@ fmod QC is
     eq  [size2.5]  : size(M1 (x) M2) = size(M1) + size(M2) .
 
     --- quantum gates
-    ops P0 P1 X Y Z H S T : Nat -> Mat .
+    ops P0 P1 I X Y Z H S T : Nat -> Mat .
     ops CX CY CZ SWAP : Nat Nat -> Mat .
     ops CCX CCZ CSWAP : Nat Nat Nat -> Mat .
 
     --- single-qubit gates
     eq [P0] : P0(N) x V = (I(N) (x) |0><0| (x) I(size(V) - (N + 1))) x V .
     eq [P1] : P1(N) x V = (I(N) (x) |1><1| (x) I(size(V) - (N + 1))) x V .
+    eq [I]  : I(N) x V  = V .
     eq [X]  : X(N) x V  = (I(N) (x) (|0><1| + |1><0|) (x) I(size(V) - (N + 1))) x V .
     eq [Y]  : Y(N) x V  = (I(N) (x) ((-1 i) . |0><1| + (1 i) . |1><0|) (x) I(size(V) - (N + 1))) x V .
     eq [Z]  : Z(N) x V  = (I(N) (x) (|0><0| + (-1) . |1><1|) (x) I(size(V) - (N + 1))) x V .
