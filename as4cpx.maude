@@ -1,0 +1,168 @@
+fmod FLOAT-RENAME is
+    pr FLOAT * (
+        op -_ : Float -> Float to -f_,
+        op _+_ : Float Float -> Float to _+f_,
+        op _-_ : Float Float -> Float to _-f_,
+        op _*_ : Float Float -> Float to _*f_,
+        op _/_ : [Float] [Float] -> [Float] to _/f_,
+        op _rem_ : [Float] [Float] -> [Float] to _remf_,
+        op _^_ : [Float] [Float] -> [Float] to _^f_,
+        op abs : Float -> Float to absf,
+        op sqrt : [Float] -> [Float] to sqrtf,
+        op floor : Float -> Float to floorf,
+        op ceiling : Float -> Float to ceilingf,
+        op min : Float Float -> Float to minf,
+        op max : Float Float -> Float to maxf,
+        op _<_ : Float Float -> Bool to _<f_,
+        op _>_ : Float Float -> Bool to _>f_,
+        op _<=_ : Float Float -> Bool to _<=f_,
+        op _>=_ : Float Float -> Bool to _>=f_
+    ) .
+    sort ZeroF .
+    subsort ZeroF < FiniteFloat .
+    mb (0.) : ZeroF .
+endfm
+
+fmod CONVERSION-RENAME is
+    pr RAT .
+    pr FLOAT-RENAME .
+    pr STRING .
+    sort DecFloat .
+    op <_,_,_> : Int String Int -> DecFloat [ctor] .
+    op float : Rat -> Float [special (
+        id-hook FloatOpSymbol (float)
+        op-hook floatSymbol (<Floats> : ~> Float)
+        op-hook succSymbol (s_ : Nat ~> NzNat)
+        op-hook minusSymbol (-_ : NzNat ~> Int)
+        op-hook divisionSymbol (_/_ : NzInt NzNat ~> NzRat))] .
+    op rat : FiniteFloat -> Rat [special (
+        id-hook FloatOpSymbol (rat)
+        op-hook floatSymbol (<Floats> : ~> Float)
+        op-hook succSymbol (s_ : Nat ~> NzNat)
+        op-hook minusSymbol (-_ : NzNat ~> Int)
+        op-hook divisionSymbol (_/_ : NzInt NzNat ~> NzRat))] .
+    op string : [Rat] [NzNat] -> [String] [special (
+        id-hook StringOpSymbol (string)
+        op-hook stringSymbol (<Strings> : ~> String)
+        op-hook succSymbol (s_ : Nat ~> NzNat)
+        op-hook minusSymbol (-_ : NzNat ~> Int)
+        op-hook divisionSymbol (_/_ : NzInt NzNat ~> NzRat))] .
+    op rat : [String] [NzNat] -> [Rat] [special (
+        id-hook StringOpSymbol (rat)
+        op-hook stringSymbol (<Strings> : ~> String)
+        op-hook succSymbol (s_ : Nat ~> NzNat)
+        op-hook minusSymbol (-_ : NzNat ~> Int)
+        op-hook divisionSymbol (_/_ : NzInt NzNat ~> NzRat))] .
+    op string : Float -> String [special (
+        id-hook StringOpSymbol (string)
+        op-hook stringSymbol (<Strings> : ~> String)
+        op-hook floatSymbol (<Floats> : ~> Float))] .
+    op float : [String] -> [Float] [special (
+        id-hook StringOpSymbol (float)
+        op-hook stringSymbol (<Strings> : ~> String)
+        op-hook floatSymbol (<Floats> : ~> Float))] .
+    op decFloat : Float Nat -> DecFloat [special (
+        id-hook StringOpSymbol (decFloat)
+        op-hook stringSymbol (<Strings> : ~> String)
+        op-hook floatSymbol (<Floats> : ~> Float)
+        op-hook succSymbol (s_ : Nat ~> NzNat)
+        op-hook minusSymbol (-_ : NzNat ~> Int)
+        op-hook decFloatSymbol (<_, _, _> : Int String Int ~> DecFloat))] .
+endfm
+
+--- fmod FLOAT-OR-RAT is
+---     pr CONVERSION-RENAME .
+
+---     sort FloatOrRat .
+---     subsort Float Rat < FloatOrRat .
+    
+---     op fval : FloatOrRat -> Float .
+---     op _+_ : FloatOrRat FloatOrRat -> Float [ditto] .
+---     op _-_ : FloatOrRat FloatOrRat -> Float [ditto] .
+---     op _*_ : FloatOrRat FloatOrRat -> Float [ditto] .
+---     op _/_ : [FloatOrRat] [FloatOrRat] -> [Float] [ditto] .
+---     op _<_ : FloatOrRat FloatOrRat -> Bool [ditto] .
+---     op _>_ : FloatOrRat FloatOrRat -> Bool [ditto] .
+---     op _<=_ : FloatOrRat FloatOrRat -> Bool [ditto] .
+---     op _>=_ : FloatOrRat FloatOrRat -> Bool [ditto] .
+---     op abs : FloatOrRat -> Float [ditto] .
+
+---     var R : Rat .
+---     var F : Float .
+---     var FR1 FR2 : FloatOrRat .
+---     eq fval(R) = float(R) .
+---     eq fval(F) = F .
+---     eq FR1 + FR2 = float(FR1) +f float(FR2) .
+---     eq FR1 - FR2 = float(FR1) -f float(FR2) .
+---     eq FR1 * FR2 = float(FR1) *f float(FR2) .
+---     eq FR1 / FR2 = float(FR1) /f float(FR2) .
+---     eq FR1 > FR2 = float(FR1) >f float(FR2) .
+---     eq FR1 < FR2 = float(FR1) <f float(FR2) .
+---     eq FR1 >= FR2 = float(FR1) >=f float(FR2) .
+---     eq FR1 <= FR2 = float(FR1) <=f float(FR2) .
+---     eq abs(FR1) = absf(FR1) .
+--- endfm
+
+fmod CPX-STANDARD is
+    pr CONVERSION-RENAME .
+    sorts Imag CpxS .
+    subsorts Float Imag < CpxS .
+    
+    op _i : Float -> Imag .
+    op _+_ : Float Imag -> CpxS [ctor comm assoc] .
+    op _+_ : CpxS CpxS -> CpxS [ditto] .
+    op |_| : CpxS -> Float .
+
+    vars F F1 F2 F3 F4 : Float .
+    vars I I1 I2 : Imag .
+
+    eq F + 0.0 i = F .
+    eq 0.0 + I = I .
+    eq (F1 + F2 i) + (F3 + F4 i) = (F1 +f F3) + (F2 +f F4) i .
+    eq (F2 i) + (F3 + F4 i) = F3 + (F2 +f F4) i .
+    eq F1 + (F3 + F4 i) = (F1 +f F3) + F4 i .
+    eq (F2 i) + (F4 i) = (F2 +f F4) i .
+    eq F1 + F3 = F1 +f F3 .
+    eq | F1 + F2 i | = sqrtf((F1 *f F1) +f (F2 *f F2)) .
+    eq | F1 | = absf(F1) .
+    eq | F2 i | = absf(F2) .
+endfm
+
+fmod CPX is
+    pr CPX-STANDARD .
+    sorts ZeroCpx NzCpx Cpx .
+    subsort ZeroCpx NzCpx < Cpx .
+    op toCpxS : Cpx -> CpxS .
+    op toCpxS : Cpx Nat -> CpxS .
+    op (_,_,_,_) : Zero Zero Zero Zero -> ZeroCpx [ctor] .
+    op (_,_,_,_) : NzInt Int Int Int -> NzCpx [ctor] .
+    op (_,_,_,_) : Int NzInt Int Int -> NzCpx [ctor] .
+    op (_,_,_,_) : Int Int NzInt Int -> NzCpx [ctor] .
+    op (_,_,_,_) : Int Int Int NzInt -> NzCpx [ctor] .
+    op (_,_,_,_) : Int Int Int Int -> Cpx [ctor] .
+    op _+_ : Cpx Cpx -> Cpx [comm] .
+    op _*_ : Cpx Cpx -> Cpx [comm] .
+    op _^* : Cpx -> Cpx .
+    
+    vars I1 I2 I3 I4 : Int .
+    vars I1' I2' I3' I4' : Int .
+    eq (I1, I2, I3, I4) + (I1', I2', I3', I4') = (I1 + I1', I2 + I2', I3 + I3', I4 + I4') .
+    eq (I1, I2, I3, I4) * (I1', I2', I3', I4') 
+    = ((I1 * I4') + (I2 * I3') + (I3 * I2') + (I4 * I1'),
+        (- I1 * I1') + (I2 * I4') + (I3 * I3') + (I4 * I2'),
+        (- I1 * I2') + (- I2 * I1') + (I3 * I4') + (I4 * I3'),
+        (- I1 * I3') + (- I2 * I2') + (- I3 * I1') + (I4 * I4') 
+        ) .
+    --- @todo
+    eq toCpxS((I1,I2,I3,I4)) = float(I1) + float(I2) i .
+    eq (I1, I2, I3, I4)^* = (I1, - I4, - I3, - I2) .
+endfm
+
+eof
+
+red in CPX : (0,0,0,0) .
+red in CPX : (0,0,0,1) .
+red in CPX : (0,0,1,0) .
+red in CPX : (0,1,0,0) .
+red in CPX : (1,0,0,0) .
+red in CPX : (1,2,3,4) .
