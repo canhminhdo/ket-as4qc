@@ -1,6 +1,12 @@
 in as4qc.maude
 
-red (P0(1) x P0(0) x H(0) x CX(0, 1) x CX(1,2) x H(1)) x (|0> (x) |0> (x) |0>) .
+--- red (P0(1) x P0(0) x H(0) x CX(0, 1) x CX(1,2) x H(1)) x (|0> (x) |0> (x) |0>) .
+
+fmod TEST is
+    pr QC .
+    --- You must set size of V in advance.
+    eq sizeV = 100 .
+endfm
 
 red (
 CX(98, 99) x

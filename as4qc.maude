@@ -1,12 +1,19 @@
+load debug.maude
 load as4cpx.maude
 
 fmod DIRAC is
-    sorts Ket Bra .
-
+    pr CPX .
+    ---
+    sorts BKet Ket BBra Bra BBraKet BraKet .
+    subsort BKet < Ket .
+    subsort BBra < Bra .
+    subsort BBraKet < BraKet .
     --- basis vectors
-    ops |0> |1> : -> Ket [ctor] .
+    ops |0> |1> : -> BKet [ctor] .
     --- basis covectors
-    ops <0| <1| : -> Bra [ctor] .
+    ops <0| <1| : -> BBra [ctor] .
+    --- basis matries
+    ops |0><0| |0><1| |1><0| |1><1| : -> BBraKet [ctor] .
 endfm
 
 fmod MAT is
@@ -15,7 +22,7 @@ fmod MAT is
 
     sorts ZeroV Vect ZeroCV CoVect ZeroM Mat .
     subsorts ZeroV Ket < Vect .
-    subsorts ZeroM < Mat .
+    subsorts ZeroM BraKet < Mat .
     subsorts ZeroCV Bra < CoVect .
 
     --- zero vector, covector and matrix
@@ -23,7 +30,7 @@ fmod MAT is
     op O^+ : -> ZeroCV [ctor] .
     op mO  : -> ZeroM [ctor] .
     --- abbreviations for basic matrices
-    ops |0><0| |0><1| |1><0| |1><1| : -> Mat [ctor] .
+    --- ops |0><0| |0><1| |1><0| |1><1| : -> BMat [ctor] .
     eq |0><0| = |0> x <0| .
     eq |0><1| = |0> x <1| .
     eq |1><0| = |1> x <0| .
@@ -31,36 +38,51 @@ fmod MAT is
     --- identity matrix
     op I : -> Mat [ctor] .
     --- scalar multiplication with matrix
+    op _._ : Cpx Ket -> Ket [prec 31] .
+    op _._ : Cpx Bra -> Bra [prec 31] .
+    op _._ : Cpx BraKet -> BraKet [prec 31] .
     op _._ : Cpx Vect -> Vect [prec 31] .
     op _._ : Cpx CoVect -> CoVect [prec 31] .
     op _._ : Cpx Mat -> Mat [prec 31] .
     --- matrix addition
-    op _+_ : Vect Vect -> Vect [comm assoc prec 33] .
-    op _+_ : CoVect CoVect -> CoVect [comm assoc prec 33] .
-    op _+_ : Mat Mat -> Mat [comm assoc prec 33] .
+    op _+_ : Ket Ket -> Ket [comm assoc prec 34] .
+    op _+_ : Bra Bra -> Bra [comm assoc prec 34] .
+    op _+_ : BraKet BraKet -> BraKet [comm assoc prec 34] .
+    op _+_ : Vect Vect -> Vect [comm assoc prec 34] .
+    op _+_ : CoVect CoVect -> CoVect [comm assoc prec 34] .
+    op _+_ : Mat Mat -> Mat [comm assoc prec 34] .
     --- matrix product
-    op _x_ : Mat Vect -> Vect [prec 31] .
-    op _x_ : Vect CoVect -> Mat [prec 31] .
-    op _x_ : Mat Mat -> Mat [assoc prec 31] .
+    --- op _x_ : BraKet Ket -> Ket [prec 32] .
+    op _x_ : Ket Bra -> BraKet [prec 32] .
+    --- op _x_ : BraKet BraKet -> BraKet [assoc prec 32] .
+    op _x_ : Mat Vect -> Vect [prec 32] .
+    op _x_ : Vect CoVect -> Mat [prec 32] .
+    op _x_ : Mat Mat -> Mat [assoc prec 33] .
     --- tensor product
-    op _(x)_ : Vect Vect -> Vect [assoc prec 31] .
-    op _(x)_ : CoVect CoVect -> CoVect [assoc prec 31] .
-    op _(x)_ : Mat Mat -> Mat [assoc prec 31] .
+    op _(x)_ : Vect Vect -> Vect [assoc prec 30] .
+    op _(x)_ : CoVect CoVect -> CoVect [assoc prec 30] .
+    op _(x)_ : Mat Mat -> Mat [assoc prec 30] .
     --- dagger
-    op (_)^+ : Vect -> CoVect [prec 30] .
-    op (_)^+ : CoVect -> Vect [prec 30] .
-    op (_)^+ : Mat -> Mat [prec 30] .
+    --- op (_)^+ : Ket -> Bra [prec 29] .
+    --- op (_)^+ : Bra -> Ket [prec 29] .
+    --- op (_)^+ : BraKet -> BraKet [prec 29] .
+    op (_)^+ : Vect -> CoVect [prec 29] .
+    op (_)^+ : CoVect -> Vect [prec 29] .
+    op (_)^+ : Mat -> Mat [prec 29] .
     --- inner product
     op <_,_> : Vect Vect -> Cpx .
     --- norm square
     op ||_||^2 : Vect -> Cpx .
 
     vars M M1 M2 M3 M4 : Mat .
-    vars V V1 V2 V3 : Vect .
+    vars V V1 V2 V3 V4 : Vect .
     vars CV CV1 CV2 CV3 : CoVect .
     vars C C1 C2 : NzCpx .
+    vars BK BK1 BK2 : BKet .
+    vars BB BB1 BB2 : Bra .
     vars K K1 K2 : Ket .
     vars B B1 B2 : Bra .
+    vars BKM : BraKet .
 
     --- norm square
     --- @todo
@@ -70,14 +92,14 @@ fmod MAT is
     --- @todo
     eq < V, O > = (0,0,0,0) .
     eq < O, V > = (0,0,0,0) .
-    eq < K1, K2 > = if K1 == K2 then (1,0,0,0) else (0,0,0,0) fi .
+    eq < BK1, BK2 > = if BK1 == BK2 then (1,0,0,0) else (0,0,0,0) fi .
     eq < C1 . V1, V2 > = (C1)^* * < V1, V2 > .
     eq < V1, C2 . V2 > = C2 * < V1, V2 > .
     eq < V1 + V2, V3 > = < V1, V3 > + < V2, V3 > .
     eq < V1, V2 + V3 > = < V1, V2 > + < V1, V3 > .
-    --- eq < K1 (x) V1, K2 (x) V2 > = < K1, K2 > * < V1, V2 > .
+    --- eq < BK1 (x) V1, BK2 (x) V2 > = < BK1, BK2 > * < V1, V2 > .
     --- optimize
-    eq < K1 (x) V1, K2 (x) V2 > = if K1 == K2 then < V1, V2 > else (0,0,0,0) fi .
+    eq < BK1 (x) V1, BK2 (x) V2 > = if BK1 == BK2 then < V1, V2 > else (0,0,0,0) fi .
     eq (< V1, V2 >)^* = < V2, V1 > .
 
     --- zero vector
@@ -138,7 +160,12 @@ fmod MAT is
     eq [dagger-M8] : ((M)^+)^+ = M .
 
     --- multiplication distributes over addition
-    eq [dist-mul-V1] : M x (V1 + V2) = M x V1 + M x V2 .
+    --- eq [dist-mul-V1] : M x (V1 + V2) = M x V1 + M x V2 .
+    eq [dist-mul-V11] : M x (|0> (x) V1 + |1> (x) V2) = M x (|0> (x) V1) + M x (|1> (x) V2) .
+    eq [dist-mul-V12] : M x (C1 . |0> + C2 . |1>) = M x (C1 . |0>) + M x (C2 . |1>) .
+    eq [dist-mul-V13] : M x (C1 . |0> + |1>) = M x (C1 . |0>) + M x |1> .
+    eq [dist-mul-V14] : M x (|0> + C2 . |1>) = M x |0> + M x (C2 . |1>) .
+    eq [dist-mul-V15] : M x (|0> + |1>) = M x |0> + M x |1> .
     eq [dist-mul-V2] : (M1 + M2) x V = M1 x V + M2 x V .
     
     eq [dist-mul-CV1] : V x (CV1 + CV2) = V x CV1 + V x CV2 .
@@ -177,24 +204,27 @@ fmod MAT is
     eq [mul-MV1] : (C . M) x V = C . (M x V) .
     eq [mul-MV2] : M x (C . V) = C . (M x V) .
     --- eq [mul-MV3] : (M1 (x) M2) x (V1 (x) V2) = (M1 x V1) (x) (M2 x V2) [nonexec] .
-    eq [mul-MV3-1] : ((K1 x B1) (x) M2) x (K2 (x) V2) = ((K1 x B1) x K2) (x) (M2 x V2) .
-    eq [mul-MV3-2] : (I (x) M2) x (K2 (x) V2) = K2 (x) (M2 x V2) .
-    eq [mul-MV4] : (K1 x B1) x K2 = < (B1)^+, K2 > . K1 .
+    --- eq [mul-MV3-1] : ((BK1 x BB1) (x) M2) x (BK2 (x) V2) = ((BK1 x BB1) x BK2) (x) (M2 x V2) . --- old
+    ceq [mul-MV3-1] : (BKM (x) M2) x (BK2 (x) V2) = V1 (x) (M2 x V2) if V1 := BKM x BK2 [print "[D] V1 = " V1].
+    eq [mul-MV3-2] : (BKM (x) M2) x ((|0> + |1>) (x) V2) = (BKM x (|0> + |1>)) (x) (M2 x V2) .
+    eq [mul-MV3-3] : (I (x) M2) x (BK2 (x) V2) = BK2 (x) (M2 x V2) .
+    eq [mul-MV3-3] : (I (x) M2) x ((|0> + |1>) (x) V2) = (|0> + |1>) (x) (M2 x V2) .
+    eq [mul-MV4] : (BK1 x BB1) x BK2 = < (BB1)^+, BK2 > . BK1 .
     eq [mul-MV5] : I x K = K .
     eq [mul-MV6] : (M1 x M2) x V = M1 x (M2 x V) .
 
     eq [mul-VCV1] : (C . V) x CV = C . (V x CV) .
     eq [mul-VCV2] : V x (C . CV) = C . (V x CV) .   
-    eq [mul-VCV3] : (K (x) V) x (B (x) CV) = (K x B) (x) (V x CV) .
+    eq [mul-VCV3] : (BK (x) V) x (BB (x) CV) = (BK x BB) (x) (V x CV) .
 
     eq [mul-MM1] : (C . M1) x M2 = C . (M1 x M2) .
     eq [mul-MM2] : M1 x (C . M2) = C . (M1 x M2) .
-    eq [mul-MM3] : (K1 x B1) x (K2 x B2) = < (B1)^+, K2 > . (K1 x B2) .
+    --- eq [mul-MM3] : (BK1 x BB1) x (BK2 x BB2) = < (BB1)^+, BK2 > . (BK1 x BB2) .
     --- eq [mul-MM4] : (M1 (x) M2) x (M3 (x) M4) = (M1 x M3) (x) (M2 x M4) [nonexec] .
-    eq [mul-MM4-1] : ((K1 x B1) (x) M1) x ((K2 x B2) (x) M2) = ((K1 x B1) x (K2 x B2)) (x) (M1 x M2) .
-    eq [mul-MM4-2] : ((K1 x B1) (x) M1) x (I (x) M2) = (K1 x B1) (x) (M1 x M2) .
-    eq [mul-MM4-3] : (I (x) M1) x ((K2 x B2) (x) M2) = (K2 x B2) (x) (M1 x M2) .
-    eq [mul-MM4-4] : (I (x) M1) x (I (x) M2) = I (x) (M1 x M2) .
+    --- eq [mul-MM4-1] : ((BK1 x BB1) (x) M1) x ((BK2 x BB2) (x) M2) = ((BK1 x BB1) x (BK2 x BB2)) (x) (M1 x M2) .
+    --- eq [mul-MM4-2] : ((BK1 x BB1) (x) M1) x (I (x) M2) = (BK1 x BB1) (x) (M1 x M2) .
+    --- eq [mul-MM4-3] : (I (x) M1) x ((BK2 x BB2) (x) M2) = (BK2 x BB2) (x) (M1 x M2) .
+    --- eq [mul-MM4-4] : (I (x) M1) x (I (x) M2) = I (x) (M1 x M2) .
     
     --- tensor product normal forms
     --- eq [tensor-V1] : (C . V1) (x) V2 = C . (V1 (x) V2) .
@@ -217,17 +247,26 @@ fmod MAT is
     --- eq [dist-tensor-M2] : (M1 + M2) (x) M3 = M1 (x) M3 + M2 (x) M3 .
 
     --- tensor product normal forms
-    eq [tensor-V1] : K1 (x) V1 + K1 (x) V2 = K1 (x) (V1 + V2) .
-    eq [tensor-V2] : (C1 . K1 (x) V1) + K1 (x) V2 = K1 (x) (C1 . V1 + V2) .
-    eq [tensor-V2] : (C1 . K1 (x) V1) + (C2 . K1 (x) V2) = K1 (x) (C1 . V1 + C2 . V2) .
+    eq [tensor-V0] : (V1 + V2) (x) V3 = V1 (x) V3 + V2 (x) V3 .
+    eq [tensor-V1] : C . (V1 (x) V2) = V1 (x) (C . V2) .
+    eq [tensor-V2] : (C . V1) (x) V2 = V1 (x) (C . V2) .
+    eq [tensor-V3] : BK1 (x) V1 + BK1 (x) V2 = BK1 (x) (V1 + V2) .
+    
 
-    eq [tensor-CV1] : B1 (x) CV1 + B1 (x) CV2 = B1 (x) (CV1 + CV2) .
-    eq [tensor-CV2] : (C1 . B1 (x) CV1) + B1 (x) CV2 = B1 (x) (C1 . CV1 + CV2) .
-    eq [tensor-CV2] : (C1 . B1 (x) CV1) + (C2 . B1 (x) CV2) = B1 (x) (C1 . CV1 + C2 . CV2) .
+    --- check definition again
+    eq [tensor-V4] : (C1 . |0> + C2 . |1>) (x) V1 + K2 (x) V2 = (C1 . |0>) (x) V1 + (C2 . |1>) (x) V1 + K2 (x) V2 .
+    eq [tensor-V5] : (|0> + C2 . |1>) (x) V1  + K2 (x) V2 = |0> (x) V1 + (C2 . |1>) (x) V1  + K2 (x) V2 .
+    eq [tensor-V6] : (C1 . |0> + |1>) (x) V1  + K2 (x) V2 = (C1 . |0>) (x) V1 + |1> (x) V1  + K2 (x) V2 .
+    eq [tensor-V7] : (|0> + |1>) (x) V1  + K2 (x) V2 = |0> (x) V1 + |1> (x) V1 + K2 (x) V2 .
+
+    eq [tensor-CV1] : BB1 (x) CV1 + BB1 (x) CV2 = BB1 (x) (CV1 + CV2) .
+    eq [tensor-CV2] : (C1 . BB1 (x) CV1) + BB1 (x) CV2 = BB1 (x) (C1 . CV1 + CV2) .
+    eq [tensor-CV2] : (C1 . BB1 (x) CV1) + (C2 . BB1 (x) CV2) = BB1 (x) (C1 . CV1 + C2 . CV2) .
 endfm
 
 fmod QC is
     pr MAT .
+    pr NAT-LIST .
 
     sorts ErrNat Nat&Err .
     subsort Nat ErrNat < Nat&Err .
@@ -243,11 +282,12 @@ fmod QC is
     vars K K1 K2 : Ket .
     vars B : Bra .
     vars C : Cpx .
+    vars NL : NatList .
 
     eq  [I1] : I x V = V .
     eq  [I2] : I(0) (x) M = M .
     eq  [I3] : M (x) I(0) = M .
-    ceq [I4] : I(N) = I (x) I(N - 1) if N > 0 .
+    ceq [I4] : I(N) = I (x) I(sd(N,1)) if N > 0 .
 
     eq  [size1.1]  : size(K) = 1 .
     eq  [size1.2]  : size(C . V) = size(V) .
@@ -266,50 +306,84 @@ fmod QC is
     eq  [size2.5]  : size(M1 (x) M2) = size(M1) + size(M2) .
 
     --- quantum gates
-    ops P0 P1 I X Y Z H S T : Nat -> Mat .
+    ops P0 P1 I X Y Z H S T Rx Ry : Nat -> Mat .
     ops CX CY CZ SWAP : Nat Nat -> Mat .
     ops CCX CCZ CSWAP : Nat Nat Nat -> Mat .
+    ops MCX MCZ : NatList Nat -> Mat .
+    op MCSWAP : NatList Nat Nat -> Mat .
     ---
     ops P0 P1 X Y Z H S T : -> Mat .
-
-
-    --- eq [X]  : X(N) x V  = (I(N) (x) (|0><1| + |1><0|) (x) I(size(V) - (N + 1))) x V .
-    eq [X]  : X(N) x V  = (I(N) (x) X (x) I(size(V) - (N + 1))) x V .
-    eq (X (x) M) x K1 (x) V1 = ((|0><1| + |1><0|) x K1) (x) (M x V1) .
-    eq X x K1 = (|0><1| + |1><0|) x K1 .
+    ---
+    op sizeV : -> Nat .
 
     --- single-qubit gates
-    eq [P0] : P0(N) x V = (I(N) (x) |0><0| (x) I(size(V) - (N + 1))) x V .
-    eq [P1] : P1(N) x V = (I(N) (x) |1><1| (x) I(size(V) - (N + 1))) x V .
+    eq [P0] : P0(N) x V = (I(N) (x) |0><0| (x) I(sd(sizeV, N + 1))) x V .
+    eq [P1] : P1(N) x V = (I(N) (x) |1><1| (x) I(sd(sizeV, N + 1))) x V .
     eq [I]  : I(N) x V  = V .
     
-    --- eq [X]  : X(N) x V  = (I(N) (x) (|0><1| + |1><0|) (x) I(size(V) - (N + 1))) x V .
-    eq [X]  : X(N) x V  = (I(N) (x) X (x) I(size(V) - (N + 1))) x V .
-
-    eq [Y]  : Y(N) x V  = (I(N) (x) ((0,0,-1,0) . |0><1| + (0,0,1,0) . |1><0|) (x) I(size(V) - (N + 1))) x V .
-    eq [Z]  : Z(N) x V  = (I(N) (x) (|0><0| + (-1,0,0,0) . |1><1|) (x) I(size(V) - (N + 1))) x V .
-    eq [H]  : H(N) x V  = (X(N) + Z(N)) x V .
+    eq [X]  : X(N) x V  = (I(N) (x) (|0><1| + |1><0|) (x) I(sd(sizeV, N + 1))) x V .
+    eq [Y]  : Y(N) x V  = (I(N) (x) ((0,0,-1,0) . |0><1| + (0,0,1,0) . |1><0|) (x) I(sd(sizeV, N + 1))) x V .
+    eq [Z]  : Z(N) x V  = (I(N) (x) (|0><0| + (-1,0,0,0) . |1><1|) (x) I(sd(sizeV, N + 1))) x V .
+    --- eq [H]  : H(N) x V  = (X(N) + Z(N)) x V .
+    eq [H]  : H(N) x V  = (I(N) (x) (|0><0| + |0><1| + |1><0| + (-1,0,0,0) . |1><1|) (x) I(sd(sizeV, N + 1))) x V .
     eq [S]  : S(N) x V  = (P0(N) + ((0,0,1,0) . P1(N))) x V .
     eq [T]  : T(N) x V  = (P0(N) + (0,1,0,0) . P1(N)) x V .
+    --- Rx[pi/2]
+    eq [Rx]  : Rx(N) x V  = (I(N) (x) (|0><0| + (0,0,-1,0) . |0><1| + (0,0,-1,0) . |1><0| + |1><1|) (x) I(sd(sizeV, N + 1))) x V .
+    --- Ry[pi/2]
+    eq [Ry]  : Ry(N) x V  = (I(N) (x) (|0><0| + (-1,0,0,0) . |0><1| + |1><0| + |1><1|) (x) I(sd(sizeV, N + 1))) x V .
 
-    --- --- two-qubit gates
-    eq [CX]    : CX(N1, N2) x V   = (P0(N1) + (P1(N1) x X(N2))) x V .
-    eq [CY]    : CY(N1, N2) x V   = (P0(N1) + (P1(N1) x Y(N2))) x V .
-    eq [CZ]    : CZ(N1, N2) x V   = (P0(N1) + (P1(N1) x Z(N2))) x V .
+    --- two-qubit gates
+    eq [CX]    : CX(N1, N2) x V   = (P0(N1) + (X(N2) x P1(N1))) x V .
+    eq [CY]    : CY(N1, N2) x V   = (P0(N1) + (Y(N2) x P1(N1))) x V .
+    eq [CZ]    : CZ(N1, N2) x V   = (P0(N1) + (Z(N2) x P1(N1))) x V .
     eq [SWAP]  : SWAP(N1, N2) x V = (CX(N1, N2) x CX(N2, N1) x CX(N1, N2)) x V .
 
-    --- --- three-qubit gates
-    eq [CCX]   : CCX(N1, N2, N3) x V   = (P0(N1) + (P1(N1) x CX(N2, N3))) x V .
-    eq [CCZ]   : CCZ(N1, N2, N3) x V   = (P0(N1) + (P1(N1) x CZ(N2, N3))) x V .
-    eq [CSWAP] : CSWAP(N1, N2, N3) x V = (P0(N1) + (P1(N1) x SWAP(N2,N3))) x V .
+    --- three-qubit gates
+    eq [CCX]   : CCX(N1, N2, N3) x V   = (P0(N1) + (CX(N2, N3) x P1(N1))) x V .
+    eq [CCZ]   : CCZ(N1, N2, N3) x V   = (P0(N1) + (CZ(N2, N3) x P1(N1))) x V .
+    eq [CSWAP] : CSWAP(N1, N2, N3) x V = (P0(N1) + (SWAP(N2,N3) x P1(N1))) x V .
+
+    --- multiple qubit gates
+    eq [MCX] : MCX(N1 NL, N) x V = (P0(N1) + (MCX(NL, N) x P1(N1))) x V .
+    eq [MCX] : MCX(nil, N) x V = X(N) x V .
+    eq [MCZ] : MCZ(N1 NL, N) x V = (P0(N1) + (MCZ(NL, N) x P1(N1))) x V .
+    eq [MCZ] : MCZ(nil, N) x V = Z(N) x V .
+    eq [MCSWAP] : MCSWAP(N1 NL, N2, N3) x V = (P0(N1) + (MCSWAP(NL, N2, N3) x P1(N1))) x V .
+    eq [MCSWAP] : MCSWAP(nil, N2, N3) x V = SWAP(N2,N3) x V .
 endfm
 
-red (I(1) (x) (|0><1| + |1><0|) (x) I(3 - (1 + 1))) .
+fmod TEST is
+    pr QC .
+    --- You must set size of V in advance.
+    eq sizeV = 3 .
+endfm
 
-red X(2) x ((2,0,0,0) . |0> (x) |0> (x) |0> + 
-    (3,0,0,0) . |0> (x) |0> (x) |1>) .
+red (|0> (x) |0> +  |0> (x) |0>) (x) |0> .
+red (|0> (x) |0> +  |1> (x) |1>) (x) |0> .
+red |0> (x) (|0> (x) |0> + |0> (x) |1> + |1> (x) |0> + |1> (x) |1>) .
 
 eof
+
+red |0> (x) (|0> + |1>) (x) |0> + |0> (x) (|0> + |1>) (x) |1> .
+red H(0) x ((2,0,0,0) . |0> (x) |0> (x) |0> + (2,0,0,0) . |1> (x) |0> (x) |1>) .
+
+eof 
+
+red H(0) x ((2,0,0,0) . |0> (x) |0> (x) |0> + (2,0,0,0) . |0> (x) |0> (x) |1>) .
+
+red H(0) x ((2,0,0,0) . |0> (x) |0> (x) |0> + 
+    (2,0,0,0) . |0> (x) |0> (x) |1>) .
+
+eof
+
+--- red ((2,0,0,0) . ((3,0,0,0) . |0>)) .
+
+
+--- red (I(1) (x) (|0><1| + |1><0|) (x) I(3 - (1 + 1))) .
+
+--- red X(2) x ((2,0,0,0) . |0> (x) |0> (x) |0> + 
+---     (3,0,0,0) . |0> (x) |0> (x) |1>) .
 
 fmod QC is
     pr MAT .

@@ -140,18 +140,18 @@ fmod CPX is
     op (_,_,_,_) : Int Int NzInt Int -> NzCpx [ctor] .
     op (_,_,_,_) : Int Int Int NzInt -> NzCpx [ctor] .
     op (_,_,_,_) : Int Int Int Int -> Cpx [ctor] .
-    op _+_ : Cpx Cpx -> Cpx [comm] .
-    op _*_ : Cpx Cpx -> Cpx [comm] .
-    op _^* : Cpx -> Cpx .
+    op _+_ : Cpx Cpx -> Cpx [comm prec 33] .
+    op _*_ : Cpx Cpx -> Cpx [comm prec 31] .
+    op _^* : Cpx -> Cpx [prec 29] .
     
     vars I1 I2 I3 I4 : Int .
     vars I1' I2' I3' I4' : Int .
     eq (I1, I2, I3, I4) + (I1', I2', I3', I4') = (I1 + I1', I2 + I2', I3 + I3', I4 + I4') .
     eq (I1, I2, I3, I4) * (I1', I2', I3', I4') 
-    = ((I1 * I4') + (I2 * I3') + (I3 * I2') + (I4 * I1'),
-        (- I1 * I1') + (I2 * I4') + (I3 * I3') + (I4 * I2'),
-        (- I1 * I2') + (- I2 * I1') + (I3 * I4') + (I4 * I3'),
-        (- I1 * I3') + (- I2 * I2') + (- I3 * I1') + (I4 * I4') 
+    = ((I1 * I1') + (- I2 * I4') + (- I3 * I3') + (- I4 * I2'),
+        (I1 * I2') + (I2 * I1') + (- I3 * I4') + (- I4 * I3'),
+        (I1 * I3') + (I2 * I2') + (I3 * I1') + (I4 * I4'),
+        (I1 * I4') + (I2 * I3') + (I3 * I2') + (I4 * I1') 
         ) .
     --- @todo
     eq toCpxS((I1,I2,I3,I4)) = float(I1) + float(I2) i .
