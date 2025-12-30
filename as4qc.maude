@@ -245,7 +245,7 @@ fmod QC is
     vars M M1 M2 : Mat .
     vars K K1 K2 : Ket .
     vars B : Bra .
-    vars C : Cpx .
+    vars C : NzCpx .
     vars NL : NatList .
 
     eq  [I1] : I(0) (x) M = M .

@@ -140,12 +140,15 @@ fmod CPX is
     op (_,_,_,_) : Int Int NzInt Int -> NzCpx [ctor] .
     op (_,_,_,_) : Int Int Int NzInt -> NzCpx [ctor] .
     op (_,_,_,_) : Int Int Int Int -> Cpx [ctor] .
-    op _+_ : Cpx Cpx -> Cpx [comm prec 33] .
-    op _*_ : Cpx Cpx -> Cpx [comm prec 31] .
+    op _+_ : Cpx Cpx -> Cpx [comm assoc prec 33] .
+    op _*_ : Cpx Cpx -> Cpx [comm assoc prec 31] .
+    op _*_ : NzCpx NzCpx -> NzCpx [ditto] .
     op _^* : Cpx -> Cpx [prec 29] .
+    op _^* : NzCpx -> NzCpx [prec 29] .
     
-    vars I1 I2 I3 I4 : Int .
-    vars I1' I2' I3' I4' : Int .
+    vars C : Cpx .
+    vars I I1 I2 I3 I4 : Int .
+    vars I' I1' I2' I3' I4' : Int .
     eq (I1, I2, I3, I4) + (I1', I2', I3', I4') = (I1 + I1', I2 + I2', I3 + I3', I4 + I4') .
     eq (I1, I2, I3, I4) * (I1', I2', I3', I4') 
     = ((I1 * I1') + (- I2 * I4') + (- I3 * I3') + (- I4 * I2'),
@@ -156,6 +159,14 @@ fmod CPX is
     --- @todo
     eq toCpxS((I1,I2,I3,I4)) = float(I1) + float(I2) i .
     eq (I1, I2, I3, I4)^* = (I1, - I4, - I3, - I2) .
+    --- @todo: symbolic reasoning for integers
+    eq I * 0 = 0 .
+    eq I + 0 = I .
+    eq I * 1 = I .
+    eq I - I = 0 .
+    --- @todo: symbolic reasoning for complex numbers
+    eq (1,0,0,0) * C = C .
+    eq (0,0,0,0) * C = (0,0,0,0) .
 endfm
 
 eof

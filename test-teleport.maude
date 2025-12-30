@@ -4,9 +4,13 @@ fmod TEST is
     pr QC .
     --- You must set size of V in advance.
     eq sizeV = 3 .
-    ops a1 a2 a3 a4 : -> Nat .
-    ops b1 b2 b3 b4 : -> Nat .
+    ops a b : -> NzCpx .
+    op |psi> : -> Vect .
+    eq |psi> = (a . |0> + b . |1>) .
 endfm
 
-red (P0(1) x P0(0) x H(0) x CX(0, 1) x CX(1,2) x H(1)) x (((2,0,0,0) . |0> + (3,0,0,0) . |1>) (x) |0> (x) |0>) .
-red (P0(1) x P0(0) x H(0) x CX(0, 1) x CX(1,2) x H(1)) x (((a1,a2,a3,a4) . |0> + (b1,b2,b3,b4) . |1>) (x) |0> (x) |0>) .
+red (P0(1) x P0(0) x H(0) x CX(0, 1) x CX(1,2) x H(1)) x (((2,3,4,5) . |0> + (3,4,5,6) . |1>) (x) |0> (x) |0>) .
+red (P0(1) x P0(0) x H(0) x CX(0, 1) x CX(1,2) x H(1)) x (|psi> (x) |0> (x) |0>) .
+red (Z(2) x P0(1) x P1(0) x H(0) x CX(0, 1) x CX(1,2) x H(1)) x (|psi> (x) |0> (x) |0>) .
+red (X(2) x P1(1) x P0(0) x H(0) x CX(0, 1) x CX(1,2) x H(1)) x (|psi> (x) |0> (x) |0>) .
+red (Z(2) x X(2) x P1(1) x P1(0) x H(0) x CX(0, 1) x CX(1,2) x H(1)) x (|psi> (x) |0> (x) |0>) .
