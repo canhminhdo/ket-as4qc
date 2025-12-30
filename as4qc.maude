@@ -78,11 +78,9 @@ fmod MAT is
     vars V V1 V2 V3 V4 : Vect .
     vars CV CV1 CV2 CV3 : CoVect .
     vars C C1 C2 : NzCpx .
-    vars BK BK1 BK2 : BKet .
-    vars BB BB1 BB2 : Bra .
-    vars K K1 K2 : Ket .
-    vars B B1 B2 : Bra .
-    vars BKM : BraKet .
+    vars K K1 K2 : BKet .
+    vars B B1 B2 : BBra .
+    vars BK : BraKet .
 
     --- norm square
     --- @todo
@@ -92,14 +90,14 @@ fmod MAT is
     --- @todo
     eq < V, O > = (0,0,0,0) .
     eq < O, V > = (0,0,0,0) .
-    eq < BK1, BK2 > = if BK1 == BK2 then (1,0,0,0) else (0,0,0,0) fi .
+    eq < K1, K2 > = if K1 == K2 then (1,0,0,0) else (0,0,0,0) fi .
     eq < C1 . V1, V2 > = (C1)^* * < V1, V2 > .
     eq < V1, C2 . V2 > = C2 * < V1, V2 > .
     eq < V1 + V2, V3 > = < V1, V3 > + < V2, V3 > .
     eq < V1, V2 + V3 > = < V1, V2 > + < V1, V3 > .
-    --- eq < BK1 (x) V1, BK2 (x) V2 > = < BK1, BK2 > * < V1, V2 > .
+    --- eq < K1 (x) V1, K2 (x) V2 > = < K1, K2 > * < V1, V2 > .
     --- optimize
-    eq < BK1 (x) V1, BK2 (x) V2 > = if BK1 == BK2 then < V1, V2 > else (0,0,0,0) fi .
+    eq < K1 (x) V1, K2 (x) V2 > = if K1 == K2 then < V1, V2 > else (0,0,0,0) fi .
     eq (< V1, V2 >)^* = < V2, V1 > .
 
     --- zero vector
@@ -204,28 +202,22 @@ fmod MAT is
     eq [mul-MV1] : (C . M) x V = C . (M x V) .
     eq [mul-MV2] : M x (C . V) = C . (M x V) .
     --- eq [mul-MV3] : (M1 (x) M2) x (V1 (x) V2) = (M1 x V1) (x) (M2 x V2) [nonexec] .
-    --- eq [mul-MV3-1] : ((BK1 x BB1) (x) M2) x (BK2 (x) V2) = ((BK1 x BB1) x BK2) (x) (M2 x V2) . --- old
-    ceq [mul-MV3-1] : (BKM (x) M2) x (BK2 (x) V2) = V1 (x) (M2 x V2) if V1 := BKM x BK2 [print "[D] V1 = " V1].
-    eq [mul-MV3-2] : (BKM (x) M2) x ((|0> + |1>) (x) V2) = (BKM x (|0> + |1>)) (x) (M2 x V2) .
-    eq [mul-MV3-3] : (I (x) M2) x (BK2 (x) V2) = BK2 (x) (M2 x V2) .
+    --- eq [mul-MV3-1] : ((K1 x B1) (x) M2) x (K2 (x) V2) = ((K1 x B1) x K2) (x) (M2 x V2) . --- old
+    ceq [mul-MV3-1] : (BK (x) M2) x (K2 (x) V2) = V1 (x) (M2 x V2) if V1 := BK x K2 [print "[D] V1 = " V1].
+    eq [mul-MV3-2] : (BK (x) M2) x ((|0> + |1>) (x) V2) = (BK x (|0> + |1>)) (x) (M2 x V2) .
+    eq [mul-MV3-3] : (I (x) M2) x (K2 (x) V2) = K2 (x) (M2 x V2) .
     eq [mul-MV3-3] : (I (x) M2) x ((|0> + |1>) (x) V2) = (|0> + |1>) (x) (M2 x V2) .
-    eq [mul-MV4] : (BK1 x BB1) x BK2 = < (BB1)^+, BK2 > . BK1 .
+    eq [mul-MV4] : (K1 x B1) x K2 = < (B1)^+, K2 > . K1 .
     eq [mul-MV5] : I x K = K .
     eq [mul-MV6] : (M1 x M2) x V = M1 x (M2 x V) .
 
     eq [mul-VCV1] : (C . V) x CV = C . (V x CV) .
     eq [mul-VCV2] : V x (C . CV) = C . (V x CV) .   
-    eq [mul-VCV3] : (BK (x) V) x (BB (x) CV) = (BK x BB) (x) (V x CV) .
+    eq [mul-VCV3] : (K (x) V) x (B (x) CV) = (K x B) (x) (V x CV) .
 
     eq [mul-MM1] : (C . M1) x M2 = C . (M1 x M2) .
-    eq [mul-MM2] : M1 x (C . M2) = C . (M1 x M2) .
-    --- eq [mul-MM3] : (BK1 x BB1) x (BK2 x BB2) = < (BB1)^+, BK2 > . (BK1 x BB2) .
-    --- eq [mul-MM4] : (M1 (x) M2) x (M3 (x) M4) = (M1 x M3) (x) (M2 x M4) [nonexec] .
-    --- eq [mul-MM4-1] : ((BK1 x BB1) (x) M1) x ((BK2 x BB2) (x) M2) = ((BK1 x BB1) x (BK2 x BB2)) (x) (M1 x M2) .
-    --- eq [mul-MM4-2] : ((BK1 x BB1) (x) M1) x (I (x) M2) = (BK1 x BB1) (x) (M1 x M2) .
-    --- eq [mul-MM4-3] : (I (x) M1) x ((BK2 x BB2) (x) M2) = (BK2 x BB2) (x) (M1 x M2) .
-    --- eq [mul-MM4-4] : (I (x) M1) x (I (x) M2) = I (x) (M1 x M2) .
-    
+    --- eq [mul-MM4-4] : (I (x) M1) x (I (x) M2) = I (x) (M1 x M2B) .
+   
     --- tensor product normal forms
     --- eq [tensor-V1] : (C . V1) (x) V2 = C . (V1 (x) V2) .
     --- eq [tensor-V2] : V1 (x) (C . V2) = C . (V1 (x) V2) .
@@ -250,7 +242,7 @@ fmod MAT is
     eq [tensor-V0] : (V1 + V2) (x) V3 = V1 (x) V3 + V2 (x) V3 .
     eq [tensor-V1] : C . (V1 (x) V2) = V1 (x) (C . V2) .
     eq [tensor-V2] : (C . V1) (x) V2 = V1 (x) (C . V2) .
-    eq [tensor-V3] : BK1 (x) V1 + BK1 (x) V2 = BK1 (x) (V1 + V2) .
+    eq [tensor-V3] : K1 (x) V1 + K1 (x) V2 = K1 (x) (V1 + V2) .
     
 
     --- check definition again
@@ -259,9 +251,9 @@ fmod MAT is
     eq [tensor-V6] : (C1 . |0> + |1>) (x) V1  + K2 (x) V2 = (C1 . |0>) (x) V1 + |1> (x) V1  + K2 (x) V2 .
     eq [tensor-V7] : (|0> + |1>) (x) V1  + K2 (x) V2 = |0> (x) V1 + |1> (x) V1 + K2 (x) V2 .
 
-    eq [tensor-CV1] : BB1 (x) CV1 + BB1 (x) CV2 = BB1 (x) (CV1 + CV2) .
-    eq [tensor-CV2] : (C1 . BB1 (x) CV1) + BB1 (x) CV2 = BB1 (x) (C1 . CV1 + CV2) .
-    eq [tensor-CV2] : (C1 . BB1 (x) CV1) + (C2 . BB1 (x) CV2) = BB1 (x) (C1 . CV1 + C2 . CV2) .
+    eq [tensor-CV1] : B1 (x) CV1 + B1 (x) CV2 = B1 (x) (CV1 + CV2) .
+    eq [tensor-CV2] : (C1 . B1 (x) CV1) + B1 (x) CV2 = B1 (x) (C1 . CV1 + CV2) .
+    eq [tensor-CV2] : (C1 . B1 (x) CV1) + (C2 . B1 (x) CV2) = B1 (x) (C1 . CV1 + C2 . CV2) .
 endfm
 
 fmod QC is
