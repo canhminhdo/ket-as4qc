@@ -1,5 +1,11 @@
 in as4qc.maude
 
+fmod TEST is
+    pr QC .
+    --- You must set size of V in advance.
+    eq sizeV = 3 .
+endfm
+
 red (2,0,0,0) . |0> (x) |0> (x) |0> + 
     (3,0,0,0) . |0> (x) |0> (x) |1> + 
     (4,0,0,0) . |0> (x) |1> (x) |0> + 
