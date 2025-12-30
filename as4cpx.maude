@@ -171,9 +171,3 @@ endfm
 
 eof
 
-red in CPX : (0,0,0,0) .
-red in CPX : (0,0,0,1) .
-red in CPX : (0,0,1,0) .
-red in CPX : (0,1,0,0) .
-red in CPX : (1,0,0,0) .
-red in CPX : (1,2,3,4) .

@@ -1,11 +1,4 @@
 in as4qc.maude
 
-fmod TEST is
-    pr QC .
-    --- @todo: MUST set the size of V in advance
-    eq sizeV = 3 .
-endfm
-
 red <0| (x) <0| (x) <0| + <0| (x) <0| (x) <1| .
-
 red (<0| (x) <0| (x) <0| + <0| (x) <0| (x) <1|)^+ .

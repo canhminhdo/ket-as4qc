@@ -220,24 +220,23 @@ fmod MAT is
     ceq [mul-MV3] : (BK (x) M2) x (K2 (x) V2) = (if V1 == O then O else V1 (x) (M2 x V2) fi) if V1 := BK x K2 . --- optimize
     eq  [mul-MV4] : (I (x) M2) x (K2 (x) V2) = K2 (x) (M2 x V2) .
     ceq [mul-MV5] : (K1 x B1) x K2 = V if V := < (B1)^+, K2 > . K1 . --- optimize
-    ceq [mul-MV6] : (M1 x M2) x V = M1 x V1 if V1 := (M2 x V) [print "M2 = " M2 ", M1 = " M1] .
+    ceq [mul-MV6] : (M1 x M2) x V = M1 x V1 if V1 := (M2 x V) .
     ---
     eq [mul-VCV3] : (K (x) V) x (B (x) CV) = (K x B) (x) (V x CV) .
     ---
-    eq [mul-MM1] : (C . M1) x M2 = C . (M1 x M2) .
-    --- eq [mul-MM2] : (I (x) M1) x (I (x) M2) = I (x) (M1 x M2) .
+    eq [mul-MM3] : (I (x) M1) x (I (x) M2) = I (x) (M1 x M2) .
 endfm
 
-fmod QC is
+fmod GATE is
     pr MAT .
     pr NAT-LIST .
 
-    sorts ErrNat Nat&Err .
-    subsort Nat ErrNat < Nat&Err .
+    sorts ErrNat Nat&Err Gate GateParam .
+    subsorts Nat ErrNat < Nat&Err .
+    subsorts Gate GateParam < Mat .
 
     op I : Nat -> Mat .
-    op size : Vect -> Nat .
-    op size : Mat  -> Nat .
+    op sizeV : Vect -> Nat .
     op errNat : -> ErrNat [ctor] .
 
     vars N N1 N2 N3 : Nat .
@@ -252,101 +251,100 @@ fmod QC is
     eq  [I2] : M (x) I(0) = M .
     ceq [I3] : I(N) = I (x) I(sd(N,1)) if N > 0 .
 
-    eq  [size1.1]  : size(K) = 1 .
-    eq  [size1.2]  : size(C . V) = size(V) .
-    ceq [size1.3]  : size(V1 + V2) = size(V1) if size(V1) == size(V2) .
-    ceq [size1.3E] : size(V1 + V2) = errNat if size(V1) =/= size(V2) .
-    ceq [size1.4]  : size(M x V) = size(V) if size(M) == size(V) .
-    ceq [size1.4E] : size(M x V) = errNat if size(M) =/= size(V) .
-    eq  [size1.5]  : size(V1 (x) V2) = size(V1) + size(V2) .
-
-    eq  [size2.1]  : size(K x B) = 1 .
-    eq  [size2.2]  : size(C . M) = size(M) .
-    ceq [size2.3]  : size(M1 + M2) = size(M1) if size(M1) == size(M2) .
-    ceq [size2.3E] : size(M1 + M2) = errNat if size(M1) =/= size(M2) .
-    ceq [size2.4]  : size(M1 x M2) = size(M1) if size(M1) == size(M2) .
-    ceq [size2.4E] : size(M1 x M2) = errNat if size(M1) =/= size(M2) .
-    eq  [size2.5]  : size(M1 (x) M2) = size(M1) + size(M2) .
+    eq  [size1]  : sizeV(K) = 1 .
+    eq  [size2]  : sizeV(C . V) = sizeV(V) .
+    ceq [size3]  : sizeV(V1 + V2) = sizeV(V1) if sizeV(V1) == sizeV(V2) .
+    ceq [size3E] : sizeV(V1 + V2) = errNat if sizeV(V1) =/= sizeV(V2) .
+    eq  [size4]  : sizeV(V1 (x) V2) = sizeV(V1) + sizeV(V2) .
 
     --- quantum gates
-    ops P0 P1 I X Y Z H S T Rx Ry : Nat -> Mat .
-    ops CX CY CZ SWAP : Nat Nat -> Mat .
-    ops CCX CCZ CSWAP : Nat Nat Nat -> Mat .
-    ops MCX MCZ : NatList Nat -> Mat .
-    op  MCSWAP : NatList Nat Nat -> Mat .
-    --- 
-    op sizeV : -> Nat .
+    ops P0 P1 X Y Z H S T Rx Ry : Nat -> Gate .
+    ops CX CY CZ SWAP : Nat Nat -> Gate .
+    ops CCX CCZ CSWAP : Nat Nat Nat -> Gate .
+    ops MCX MCZ : NatList Nat -> Gate .
+    op  MCSWAP : NatList Nat Nat -> Gate .
+    --- quantum gates with an additional parameter of the size of the quantum state
+    ops P0 P1 X Y Z H S T Rx Ry : Nat Nat -> GateParam .
+    ops CX CY CZ SWAP : Nat Nat Nat -> GateParam .
+    ops CCX CCZ CSWAP : Nat Nat Nat Nat -> GateParam .
+    ops MCX MCZ : NatList Nat Nat -> GateParam .
+    op  MCSWAP : NatList Nat Nat Nat -> GateParam .
 
     --- single-qubit gates
-    eq [P0] : P0(N) x V = (I(N) (x) |0><0| (x) I(sd(sizeV, N + 1))) x V .
-    eq [P1] : P1(N) x V = (I(N) (x) |1><1| (x) I(sd(sizeV, N + 1))) x V .
-    eq [I]  : I(N) x V  = V .
-    
-    eq [X]  : X(N) x V  = (I(N) (x) (|0><1| + |1><0|) (x) I(sd(sizeV, N + 1))) x V .
-    eq [Y]  : Y(N) x V  = (I(N) (x) ((0,0,-1,0) . |0><1| + (0,0,1,0) . |1><0|) (x) I(sd(sizeV, N + 1))) x V .
-    eq [Z]  : Z(N) x V  = (I(N) (x) (|0><0| + (-1,0,0,0) . |1><1|) (x) I(sd(sizeV, N + 1))) x V .
+    eq [P0] : P0(N1, N) x V = (I(N1) (x) |0><0| (x) I(sd(N, N1 + 1))) x V .
+    eq [P1] : P1(N1, N) x V = (I(N1) (x) |1><1| (x) I(sd(N, N1 + 1))) x V .
+    eq [X]  : X(N1, N) x V  = (I(N1) (x) (|0><1| + |1><0|) (x) I(sd(N, N1 + 1))) x V .
+    eq [Y]  : Y(N1, N) x V  = (I(N1) (x) ((0,0,-1,0) . |0><1| + (0,0,1,0) . |1><0|) (x) I(sd(N, N1 + 1))) x V .
+    eq [Z]  : Z(N1, N) x V  = (I(N1) (x) (|0><0| + (-1,0,0,0) . |1><1|) (x) I(sd(N, N1 + 1))) x V .
     --- H: ignore 1/sqrt(2) factor
-    eq [H]  : H(N) x V  = (I(N) (x) (|0><0| + |0><1| + |1><0| + (-1,0,0,0) . |1><1|) (x) I(sd(sizeV, N + 1))) x V .
-    eq [S]  : S(N) x V  = (P0(N) + ((0,0,1,0) . P1(N))) x V .
-    eq [T]  : T(N) x V  = (P0(N) + (0,1,0,0) . P1(N)) x V .
+    eq [H]  : H(N1, N) x V  = (I(N1) (x) (|0><0| + |0><1| + |1><0| + (-1,0,0,0) . |1><1|) (x) I(sd(N, N1 + 1))) x V .
+    eq [S]  : S(N1, N) x V  = (I(N1) (x) (|0><0| + (0,0,1,0) . |1><1|) (x) I(sd(N, N1 + 1))) x V .
+    eq [T]  : T(N1, N) x V  = (I(N1) (x) (|0><0| + (0,1,0,0) . |1><1|) (x) I(sd(N, N1 + 1))) x V .
     --- Rx[pi/2]: ignore 1/sqrt(2) factor
-    eq [Rx]  : Rx(N) x V  = (I(N) (x) (|0><0| + (0,0,-1,0) . |0><1| + (0,0,-1,0) . |1><0| + |1><1|) (x) I(sd(sizeV, N + 1))) x V .
+    eq [Rx] : Rx(N1, N) x V  = (I(N1) (x) (|0><0| + (0,0,-1,0) . |0><1| + (0,0,-1,0) . |1><0| + |1><1|) (x) I(sd(N, N1 + 1))) x V .
     --- Ry[pi/2]: ignore 1/sqrt(2) factor
-    eq [Ry]  : Ry(N) x V  = (I(N) (x) (|0><0| + (-1,0,0,0) . |0><1| + |1><0| + |1><1|) (x) I(sd(sizeV, N + 1))) x V .
+    eq [Ry] : Ry(N1, N) x V  = (I(N1) (x) (|0><0| + (-1,0,0,0) . |0><1| + |1><0| + |1><1|) (x) I(sd(N, N1 + 1))) x V .
 
     --- two-qubit gates
-    eq [CX]    : CX(N1, N2) x V   = (P0(N1) + (X(N2) x P1(N1))) x V .
-    eq [CY]    : CY(N1, N2) x V   = (P0(N1) + (Y(N2) x P1(N1))) x V .
-    eq [CZ]    : CZ(N1, N2) x V   = (P0(N1) + (Z(N2) x P1(N1))) x V .
-    eq [SWAP]  : SWAP(N1, N2) x V = (CX(N1, N2) x CX(N2, N1) x CX(N1, N2)) x V .
+    eq [CX]    : CX(N1, N2, N) x V   = (P0(N1, N) + (X(N2, N) x P1(N1, N))) x V .
+    eq [CY]    : CY(N1, N2, N) x V   = (P0(N1, N) + (Y(N2, N) x P1(N1, N))) x V .
+    eq [CZ]    : CZ(N1, N2, N) x V   = (P0(N1, N) + (Z(N2, N) x P1(N1, N))) x V .
+    eq [SWAP]  : SWAP(N1, N2, N) x V = (CX(N1, N2, N) x CX(N2, N1, N) x CX(N1, N2, N)) x V .
 
     --- three-qubit gates
-    eq [CCX]   : CCX(N1, N2, N3) x V   = (P0(N1) + (CX(N2, N3) x P1(N1))) x V .
-    eq [CCZ]   : CCZ(N1, N2, N3) x V   = (P0(N1) + (CZ(N2, N3) x P1(N1))) x V .
-    eq [CSWAP] : CSWAP(N1, N2, N3) x V = (P0(N1) + (SWAP(N2,N3) x P1(N1))) x V .
+    eq [CCX]   : CCX(N1, N2, N3, N) x V   = (P0(N1, N) + (CX(N2, N3, N) x P1(N1, N))) x V .
+    eq [CCZ]   : CCZ(N1, N2, N3, N) x V   = (P0(N1, N) + (CZ(N2, N3, N) x P1(N1, N))) x V .
+    eq [CSWAP] : CSWAP(N1, N2, N3, N) x V = (P0(N1, N) + (SWAP(N2, N3, N) x P1(N1, N))) x V .
 
     --- multiple qubit gates
-    eq [MCX] : MCX(N1 NL, N) x V = (P0(N1) + (MCX(NL, N) x P1(N1))) x V .
-    eq [MCX] : MCX(nil, N) x V = X(N) x V .
-    eq [MCZ] : MCZ(N1 NL, N) x V = (P0(N1) + (MCZ(NL, N) x P1(N1))) x V .
-    eq [MCZ] : MCZ(nil, N) x V = Z(N) x V .
-    eq [MCSWAP] : MCSWAP(N1 NL, N2, N3) x V = (P0(N1) + (MCSWAP(NL, N2, N3) x P1(N1))) x V .
-    eq [MCSWAP] : MCSWAP(nil, N2, N3) x V = SWAP(N2,N3) x V .
+    eq [MCX]    : MCX(N1 NL, N2, N) x V = (P0(N1, N) + (MCX(NL, N2, N) x P1(N1, N))) x V .
+    eq [MCX]    : MCX(nil, N2, N) x V = X(N2, N) x V .
+    eq [MCZ]    : MCZ(N1 NL, N2, N) x V = (P0(N1, N) + (MCZ(NL, N2, N) x P1(N1, N))) x V .
+    eq [MCZ]    : MCZ(nil, N2, N) x V = Z(N2, N) x V .
+    eq [MCSWAP] : MCSWAP(N1 NL, N2, N3, N) x V = (P0(N1, N) + (MCSWAP(NL, N2, N3, N) x P1(N1, N))) x V .
+    eq [MCSWAP] : MCSWAP(nil, N2, N3, N) x V = SWAP(N2, N3, N) x V .
 endfm
 
-fmod TEST is
-    pr QC .
-    --- @todo: MUST set the size of V in advance
-    eq sizeV = 3 .
+view Gate from TRIV to GATE is
+    sort Elt to Gate .
+endv
+
+fmod QC is
+    pr LIST{Gate} * (sort NeList{Gate} to NeGateList, sort List{Gate} to GateList) .
+    
+    op [_,_] : GateList Vect -> Vect .
+    op [_,_,_,_] : GateList Vect Nat Nat -> Vect .
+    
+    vars V V' : Vect .
+    var G : Gate .
+    var GL : GateList .
+    vars N N' N1 N2 N3 : Nat .
+    vars NL : NatList .
+
+    eq [GL, V] = [GL, V, sizeV(V), 0] .
+    --- eq [nil, V, N, N'] = V .
+    --- single-qubit gates
+    ceq [P0(N1) GL, V, N, N'] = [GL, V', N, N']     if V' := P0(N1, N) x V .
+    ceq [P1(N1) GL, V, N, N'] = [GL, V', N, N']     if V' := P1(N1, N) x V .
+    ceq [X(N1) GL, V, N, N']  = [GL, V', N, N']     if V' := X(N1, N) x V .
+    ceq [Y(N1) GL, V, N, N']  = [GL, V', N, N']     if V' := Y(N1, N) x V .
+    ceq [Z(N1) GL, V, N, N']  = [GL, V', N, N']     if V' := Z(N1, N) x V .
+    ceq [H(N1) GL, V, N, N']  = [GL, V', N, N' + 1] if V' := H(N1, N) x V .
+    ceq [S(N1) GL, V, N, N']  = [GL, V', N, N']     if V' := S(N1, N) x V .
+    ceq [T(N1) GL, V, N, N']  = [GL, V', N, N']     if V' := T(N1, N) x V .
+    ceq [Rx(N1) GL, V, N, N'] = [GL, V', N, N' + 1] if V' := Rx(N1, N) x V .
+    ceq [Ry(N1) GL, V, N, N'] = [GL, V', N, N' + 1] if V' := Ry(N1, N) x V .
+    --- two-qubit gates
+    ceq [CX(N1, N2) GL, V, N, N']   = [GL, V', N, N'] if V' := CX(N1, N2, N) x V .
+    ceq [CY(N1, N2) GL, V, N, N']   = [GL, V', N, N'] if V' := CY(N1, N2, N) x V .
+    ceq [CZ(N1, N2) GL, V, N, N']   = [GL, V', N, N'] if V' := CZ(N1, N2, N) x V .
+    ceq [SWAP(N1, N2) GL, V, N, N'] = [GL, V', N, N'] if V' := SWAP(N1, N2, N) x V .
+    --- three-qubit gates
+    ceq [CCX(N1, N2, N3) GL, V, N, N']   = [GL, V', N, N'] if V' := CCX(N1, N2, N3, N) x V .
+    ceq [CCZ(N1, N2, N3) GL, V, N, N']   = [GL, V', N, N'] if V' := CCZ(N1, N2, N3, N) x V .
+    ceq [CSWAP(N1, N2, N3) GL, V, N, N'] = [GL, V', N, N'] if V' := CSWAP(N1, N2, N3, N) x V .
+    --- multiple-qubit gates
+    ceq [MCX(NL, N1) GL, V, N, N']        = [GL, V', N, N'] if V' := MCX(NL, N1, N) x V .
+    ceq [MCZ(NL, N1) GL, V, N, N']        = [GL, V', N, N'] if V' := MCZ(NL, N1, N) x V .
+    ceq [MCSWAP(NL, N1, N2) GL, V, N, N'] = [GL, V', N, N'] if V' := MCSWAP(NL, N1, N2, N) x V .
 endfm
-
-red (H(2) x H(1) x H(0)) x (|0> (x) |0> (x) |0> + |0> (x) |0> (x) |1>) .
-
-eof
-
-red H(0) x (|0> (x) |0> (x) |0>) .
-red H(2) x H(1) x H(0) x (|0> (x) |0> (x) |0>) .
-red H(0) x (|0> (x) |0> (x) (|0> + |1>)) .
-red H(0) x (|0> (x) |0> (x) ((2,0,0,0) . |0> + |1>)) .
-red H(0) x (|0> (x) |0> (x) (|0> + (2,0,0,0) . |1>)) .
-red H(0) x (|0> (x) |0> (x) ((2,0,0,0) . |0> + (2,0,0,0) . |1>)) .
-
-eof
-
-red (|0> (x) |0> +  |0> (x) |0>) (x) |0> .
-red (|0> (x) |0> +  |1> (x) |1>) (x) |0> .
-red |0> (x) (|0> (x) |0> + |0> (x) |1> + |1> (x) |0> + |1> (x) |1>) .
-
-eof
-
-red |0> (x) (|0> + |1>) (x) |0> + |0> (x) (|0> + |1>) (x) |1> .
-red H(0) x ((2,0,0,0) . |0> (x) |0> (x) |0> + (2,0,0,0) . |1> (x) |0> (x) |1>) .
-
-eof 
-
-red H(0) x ((2,0,0,0) . |0> (x) |0> (x) |0> + (2,0,0,0) . |0> (x) |0> (x) |1>) .
-
-red H(0) x ((2,0,0,0) . |0> (x) |0> (x) |0> + 
-    (2,0,0,0) . |0> (x) |0> (x) |1>) .
-
-eof

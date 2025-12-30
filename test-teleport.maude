@@ -2,15 +2,15 @@ in as4qc.maude
 
 fmod TEST is
     pr QC .
-    --- You must set size of V in advance.
-    eq sizeV = 3 .
     ops a b : -> NzCpx .
     op |psi> : -> Vect .
     eq |psi> = (a . |0> + b . |1>) .
+    --- eq |psi> = a . |0> .
+    --- eq |psi> = b . |1> .
 endfm
 
-red (P0(1) x P0(0) x H(0) x CX(0, 1) x CX(1,2) x H(1)) x (((2,3,4,5) . |0> + (3,4,5,6) . |1>) (x) |0> (x) |0>) .
-red (P0(1) x P0(0) x H(0) x CX(0, 1) x CX(1,2) x H(1)) x (|psi> (x) |0> (x) |0>) .
-red (Z(2) x P0(1) x P1(0) x H(0) x CX(0, 1) x CX(1,2) x H(1)) x (|psi> (x) |0> (x) |0>) .
-red (X(2) x P1(1) x P0(0) x H(0) x CX(0, 1) x CX(1,2) x H(1)) x (|psi> (x) |0> (x) |0>) .
-red (Z(2) x X(2) x P1(1) x P1(0) x H(0) x CX(0, 1) x CX(1,2) x H(1)) x (|psi> (x) |0> (x) |0>) .
+red [H(1) CX(1,2) CX(0, 1) H(0) P0(0) P0(1), ((2,3,4,5) . |0> + (3,4,5,6) . |1>) (x) |0> (x) |0>] .
+red [H(1) CX(1,2) CX(0, 1) H(0) P0(0) P0(1), |psi> (x) |0> (x) |0>] .
+red [H(1) CX(1,2) CX(0, 1) H(0) P1(0) P0(1) Z(2), |psi> (x) |0> (x) |0>] .
+red [H(1) CX(1,2) CX(0, 1) H(0) P0(0) P1(1) X(2), |psi> (x) |0> (x) |0>] .
+red [H(1) CX(1,2) CX(0, 1) H(0) P1(0) P1(1) X(2) Z(2), |psi> (x) |0> (x) |0>] .
