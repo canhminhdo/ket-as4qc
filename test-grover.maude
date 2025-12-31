@@ -1,6 +1,6 @@
 in as4qc.maude
 
----  #qubit: 5, marked state: 00011, #iterations: 4
+---  #qubit: 5, marked state: 11000, #iterations: 4
 red [
     --- initialize superposition qubits
 	H(0)
@@ -144,11 +144,11 @@ red [
 	H(2)
 	H(3)
 	H(4)
-	--- 00011
-	P0(0)
-	P0(1)
+	--- 11000
+	P1(0)
+	P1(1)
 	P0(2)
-	P1(3)
-	P1(4),
+	P0(3)
+	P0(4),
     |0> (x) |0> (x) |0> (x) |0> (x) |0>
  ] .
