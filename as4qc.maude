@@ -258,13 +258,13 @@ fmod GATE is
     eq  [size4]  : sizeV(V1 (x) V2) = sizeV(V1) + sizeV(V2) .
 
     --- quantum gates
-    ops P0 P1 X Y Z H S T Rx Ry : Nat -> Gate .
+    ops P0 P1 X Y Z H S T Rx Ry Rz : Nat -> Gate .
     ops CX CY CZ SWAP : Nat Nat -> Gate .
     ops CCX CCZ CSWAP : Nat Nat Nat -> Gate .
     ops MCX MCZ : NatList Nat -> Gate .
     op  MCSWAP : NatList Nat Nat -> Gate .
     --- quantum gates with an additional parameter of the size of the quantum state
-    ops P0 P1 X Y Z H S T Rx Ry : Nat Nat -> GateParam .
+    ops P0 P1 X Y Z H S T Rx Ry Rz : Nat Nat -> GateParam .
     ops CX CY CZ SWAP : Nat Nat Nat -> GateParam .
     ops CCX CCZ CSWAP : Nat Nat Nat Nat -> GateParam .
     ops MCX MCZ : NatList Nat Nat -> GateParam .
@@ -284,6 +284,8 @@ fmod GATE is
     eq [Rx] : Rx(N1, N) x V  = (I(N1) (x) (|0><0| + (0,0,-1,0) . |0><1| + (0,0,-1,0) . |1><0| + |1><1|) (x) I(sd(N, N1 + 1))) x V .
     --- Ry[pi/2]: ignore 1/sqrt(2) factor
     eq [Ry] : Ry(N1, N) x V  = (I(N1) (x) (|0><0| + (-1,0,0,0) . |0><1| + |1><0| + |1><1|) (x) I(sd(N, N1 + 1))) x V .
+    --- Rz[pi/2]: ignore 1/sqrt(2) factor
+    eq [Rz] : Rz(N1, N) x V  = (I(N1) (x) ((1,0,-1,0) . |0><0| + (1,0,1,0) . |1><1|) (x) I(sd(N, N1 + 1))) x V .
 
     --- two-qubit gates
     eq [CX]    : CX(N1, N2, N) x V   = (P0(N1, N) + (X(N2, N) x P1(N1, N))) x V .
@@ -334,6 +336,7 @@ fmod QC is
     ceq [T(N1) GL, V, N, N']  = [GL, V', N, N']     if V' := T(N1, N) x V .
     ceq [Rx(N1) GL, V, N, N'] = [GL, V', N, N' + 1] if V' := Rx(N1, N) x V .
     ceq [Ry(N1) GL, V, N, N'] = [GL, V', N, N' + 1] if V' := Ry(N1, N) x V .
+    ceq [Rz(N1) GL, V, N, N'] = [GL, V', N, N' + 1] if V' := Rz(N1, N) x V .
     --- two-qubit gates
     ceq [CX(N1, N2) GL, V, N, N']   = [GL, V', N, N'] if V' := CX(N1, N2, N) x V .
     ceq [CY(N1, N2) GL, V, N, N']   = [GL, V', N, N'] if V' := CY(N1, N2, N) x V .
