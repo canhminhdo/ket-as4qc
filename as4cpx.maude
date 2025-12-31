@@ -133,7 +133,7 @@ fmod CPX is
     sorts ZeroCpx NzCpx Cpx .
     subsort ZeroCpx NzCpx < Cpx .
     op toCpxS : Cpx -> CpxS .
-    op toCpxS : Cpx Nat -> CpxS .
+    op toFloat : Cpx -> Float .
     op (_,_,_,_) : Zero Zero Zero Zero -> ZeroCpx [ctor] .
     op (_,_,_,_) : NzInt Int Int Int -> NzCpx [ctor] .
     op (_,_,_,_) : Int NzInt Int Int -> NzCpx [ctor] .
@@ -157,7 +157,8 @@ fmod CPX is
         (I1 * I4') + (I2 * I3') + (I3 * I2') + (I4 * I1') 
         ) .
     --- @todo
-    eq toCpxS((I1,I2,I3,I4)) = float(I1) + float(I2) i .
+    ceq toFloat((I1, I2, 0, I4)) = float(I1) +f (sqrtf(2.0) *f float(I2)) if I2 == - I4 .
+    eq toFloat((I1,I2,I3,I4)) = 0.0 [owise print "NEVER COME HERE"] .
     eq (I1, I2, I3, I4)^* = (I1, - I4, - I3, - I2) .
     --- @todo: symbolic reasoning for integers
     eq I * 0 = 0 .

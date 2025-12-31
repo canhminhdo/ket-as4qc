@@ -61,7 +61,7 @@ fmod MAT is
     --- inner product
     op <_,_> : Vect Vect -> Cpx .
     --- norm square
-    op ||_||^2 : Vect -> Cpx .
+    op ||_||^2 : Vect -> Float .
 
     vars M M1 M2 M3 M4 : Mat .
     vars V V1 V2 V3 V4 : Vect .
@@ -78,7 +78,7 @@ fmod MAT is
     eq |1><1| = |1> x <1| .
 
     --- @todo: norm square
-    eq || V ||^2 = < V, V > .
+    eq || V ||^2 = toFloat(< V, V >) .
 
     --- inner product
     eq < V, O > = (0,0,0,0) .
@@ -318,7 +318,7 @@ fmod QC is
     op [_,_] : GateList Vect -> Comp .
     op [_,_,_,_] : GateList Vect Nat Nat -> Comp .
     op getVect : Comp -> Vect .
-    op getProb : Comp -> Cpx .
+    op getProb : Comp -> Float .
     
     vars V V' : Vect .
     var G : Gate .
@@ -329,7 +329,7 @@ fmod QC is
     eq [GL, V] = [GL, V, sizeV(V), 0] .
     --- eq [nil, V, N, N'] = V .
     eq getVect([nil, V, N, N']) = V .
-    eq getProb([nil, V, N, N']) = || V ||^2 .
+    eq getProb([nil, V, N, N']) = || V ||^2 /f (2.0 ^f float(N')) .
     --- single-qubit gates
     ceq [P0(N1) GL, V, N, N'] = [GL, V', N, N']     if V' := P0(N1, N) x V .
     ceq [P1(N1) GL, V, N, N'] = [GL, V', N, N']     if V' := P1(N1, N) x V .

@@ -1,7 +1,7 @@
 in as4qc.maude
 
 ---  #qubit: 5, marked state: 11000, #iterations: 4
-red [
+red getProb([
     --- initialize superposition qubits
 	H(0)
 	H(1)
@@ -151,4 +151,4 @@ red [
 	P0(3)
 	P0(4),
     |0> (x) |0> (x) |0> (x) |0> (x) |0>
- ] .
+ ]) .
