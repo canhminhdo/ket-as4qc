@@ -314,8 +314,11 @@ endv
 fmod QC is
     pr LIST{Gate} * (sort NeList{Gate} to NeGateList, sort List{Gate} to GateList) .
     
-    op [_,_] : GateList Vect -> Vect .
-    op [_,_,_,_] : GateList Vect Nat Nat -> Vect .
+    sort Comp .
+    op [_,_] : GateList Vect -> Comp .
+    op [_,_,_,_] : GateList Vect Nat Nat -> Comp .
+    op getVect : Comp -> Vect .
+    op getProb : Comp -> Cpx .
     
     vars V V' : Vect .
     var G : Gate .
@@ -325,6 +328,8 @@ fmod QC is
 
     eq [GL, V] = [GL, V, sizeV(V), 0] .
     --- eq [nil, V, N, N'] = V .
+    eq getVect([nil, V, N, N']) = V .
+    eq getProb([nil, V, N, N']) = || V ||^2 .
     --- single-qubit gates
     ceq [P0(N1) GL, V, N, N'] = [GL, V', N, N']     if V' := P0(N1, N) x V .
     ceq [P1(N1) GL, V, N, N'] = [GL, V', N, N']     if V' := P1(N1, N) x V .
