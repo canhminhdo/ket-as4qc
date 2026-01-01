@@ -135,12 +135,12 @@ fmod CPX is
     eq (I1, I2, I3, I4)^* = (I1, - I4, - I3, - I2) .
     eq toCpxS((I1, I2, I3, I4)) = (float(I1) +f ((float(I2) /f sqrtf(2.0)) -f (float(I4) /f sqrtf(2.0)))) +
                                   (((float(I2) /f sqrtf(2.0)) +f float(I3)) +f (float(I4) /f sqrtf(2.0))) i .
-    --- @todo: symbolic reasoning for integers
+    --- symbolic reasoning for integers
     eq I * 0 = 0 .
     eq I + 0 = I .
     eq I * 1 = I .
     eq I - I = 0 .
-    --- @todo: symbolic reasoning for complex numbers
+    --- symbolic reasoning for complex numbers
     eq (1,0,0,0) * C = C .
     eq (0,0,0,0) * C = (0,0,0,0) .
 endfm
