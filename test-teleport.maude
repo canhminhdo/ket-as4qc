@@ -5,6 +5,7 @@ fmod TEST is
     ops a b : -> NzCpx .
     op |psi> : -> Vect .
     eq |psi> = (a . |0> + b . |1>) .
+    eq a * a ^* + b * b ^* = (1,0,0,0) .
     --- eq |psi> = a . |0> .
     --- eq |psi> = b . |1> .
 endfm

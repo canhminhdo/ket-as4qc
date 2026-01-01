@@ -141,6 +141,7 @@ fmod CPX is
     eq I * 1 = I .
     eq I - I = 0 .
     --- symbolic reasoning for complex numbers
-    eq (1,0,0,0) * C = C .
-    eq (0,0,0,0) * C = (0,0,0,0) .
+    eq C * (0,0,0,0) = (0,0,0,0) .
+    eq C + (0,0,0,0) = C .
+    eq C * (1,0,0,0) = C .
 endfm
