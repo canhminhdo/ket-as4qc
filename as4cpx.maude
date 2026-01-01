@@ -21,6 +21,10 @@ fmod FLOAT-RENAME is
     sort ZeroF .
     subsort ZeroF < FiniteFloat .
     mb (0.) : ZeroF .
+
+    sorts ErrFloat Float&Err .
+    subsorts ErrFloat Float < Float&Err .
+    op errF : -> ErrFloat [ctor] .
 endfm
 
 fmod CONVERSION-RENAME is
@@ -70,39 +74,6 @@ fmod CONVERSION-RENAME is
         op-hook decFloatSymbol (<_, _, _> : Int String Int ~> DecFloat))] .
 endfm
 
---- fmod FLOAT-OR-RAT is
----     pr CONVERSION-RENAME .
-
----     sort FloatOrRat .
----     subsort Float Rat < FloatOrRat .
-    
----     op fval : FloatOrRat -> Float .
----     op _+_ : FloatOrRat FloatOrRat -> Float [ditto] .
----     op _-_ : FloatOrRat FloatOrRat -> Float [ditto] .
----     op _*_ : FloatOrRat FloatOrRat -> Float [ditto] .
----     op _/_ : [FloatOrRat] [FloatOrRat] -> [Float] [ditto] .
----     op _<_ : FloatOrRat FloatOrRat -> Bool [ditto] .
----     op _>_ : FloatOrRat FloatOrRat -> Bool [ditto] .
----     op _<=_ : FloatOrRat FloatOrRat -> Bool [ditto] .
----     op _>=_ : FloatOrRat FloatOrRat -> Bool [ditto] .
----     op abs : FloatOrRat -> Float [ditto] .
-
----     var R : Rat .
----     var F : Float .
----     var FR1 FR2 : FloatOrRat .
----     eq fval(R) = float(R) .
----     eq fval(F) = F .
----     eq FR1 + FR2 = float(FR1) +f float(FR2) .
----     eq FR1 - FR2 = float(FR1) -f float(FR2) .
----     eq FR1 * FR2 = float(FR1) *f float(FR2) .
----     eq FR1 / FR2 = float(FR1) /f float(FR2) .
----     eq FR1 > FR2 = float(FR1) >f float(FR2) .
----     eq FR1 < FR2 = float(FR1) <f float(FR2) .
----     eq FR1 >= FR2 = float(FR1) >=f float(FR2) .
----     eq FR1 <= FR2 = float(FR1) <=f float(FR2) .
----     eq abs(FR1) = absf(FR1) .
---- endfm
-
 fmod CPX-STANDARD is
     pr CONVERSION-RENAME .
     sorts Imag CpxS .
@@ -115,9 +86,10 @@ fmod CPX-STANDARD is
 
     vars F F1 F2 F3 F4 : Float .
     vars I I1 I2 : Imag .
+    vars C : CpxS .
 
-    eq F + 0.0 i = F .
-    eq 0.0 + I = I .
+    eq 0.0 i = 0.0 .
+    eq C + 0.0 = C .
     eq (F1 + F2 i) + (F3 + F4 i) = (F1 +f F3) + (F2 +f F4) i .
     eq (F2 i) + (F3 + F4 i) = F3 + (F2 +f F4) i .
     eq F1 + (F3 + F4 i) = (F1 +f F3) + F4 i .
@@ -133,7 +105,7 @@ fmod CPX is
     sorts ZeroCpx NzCpx Cpx .
     subsort ZeroCpx NzCpx < Cpx .
     op toCpxS : Cpx -> CpxS .
-    op toFloat : Cpx -> Float .
+    op toFloat : Cpx -> Float&Err .
     op (_,_,_,_) : Zero Zero Zero Zero -> ZeroCpx [ctor] .
     op (_,_,_,_) : NzInt Int Int Int -> NzCpx [ctor] .
     op (_,_,_,_) : Int NzInt Int Int -> NzCpx [ctor] .
@@ -156,10 +128,13 @@ fmod CPX is
         (I1 * I3') + (I2 * I2') + (I3 * I1') + (- I4 * I4'),
         (I1 * I4') + (I2 * I3') + (I3 * I2') + (I4 * I1') 
         ) .
-    --- @todo
+    ---
+    eq toFloat((I1, 0, 0, 0)) = float(I1) .
     ceq toFloat((I1, I2, 0, I4)) = float(I1) +f (sqrtf(2.0) *f float(I2)) if I2 == - I4 .
-    eq toFloat((I1,I2,I3,I4)) = 0.0 [owise print "NEVER COME HERE"] .
+    eq toFloat((I1, I2, I3, I4)) = errF [owise] .
     eq (I1, I2, I3, I4)^* = (I1, - I4, - I3, - I2) .
+    eq toCpxS((I1, I2, I3, I4)) = (float(I1) +f ((float(I2) /f sqrtf(2.0)) -f (float(I4) /f sqrtf(2.0)))) +
+                                  (((float(I2) /f sqrtf(2.0)) +f float(I3)) +f (float(I4) /f sqrtf(2.0))) i .
     --- @todo: symbolic reasoning for integers
     eq I * 0 = 0 .
     eq I + 0 = I .
@@ -169,6 +144,3 @@ fmod CPX is
     eq (1,0,0,0) * C = C .
     eq (0,0,0,0) * C = (0,0,0,0) .
 endfm
-
-eof
-
