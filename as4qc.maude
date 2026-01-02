@@ -1,4 +1,3 @@
-load debug.maude
 load as4cpx.maude
 
 fmod DIRAC is
@@ -250,11 +249,13 @@ fmod GATE is
     subsorts Nat ErrNat < Nat&Err .
     subsorts Gate GateParam < Mat .
 
-    op I : Nat -> Mat .
+    op I  : Nat -> Mat .
+    op MI : Nat -> Mat .
     op sizeV : Vect -> Nat .
     op errNat : -> ErrNat [ctor] .
 
     vars N N1 N2 N3 : Nat .
+    vars Nz : NzNat .
     vars V V1 V2 : Vect .
     vars M M1 M2 : Mat .
     vars K K1 K2 : Ket .
@@ -264,7 +265,9 @@ fmod GATE is
 
     eq  [I1] : I(0) (x) M = M .
     eq  [I2] : M (x) I(0) = M .
-    ceq [I3] : I(N) = I (x) I(sd(N,1)) if N > 0 .
+    eq  [I3] : M (x) MI(0) = M .
+    eq  [I4] : MI(Nz) x V = V .
+    ceq [I5] : I(N) = I (x) I(sd(N,1)) if N > 0 .
 
     eq  [size1]  : sizeV(K) = 1 .
     eq  [size2]  : sizeV(C . V) = sizeV(V) .
@@ -286,21 +289,21 @@ fmod GATE is
     op  MCSWAP : NatList Nat Nat Nat -> GateParam .
 
     --- single-qubit gates
-    eq [P0] : P0(N1, N) x V = (I(N1) (x) |0><0| (x) I(sd(N, N1 + 1))) x V .
-    eq [P1] : P1(N1, N) x V = (I(N1) (x) |1><1| (x) I(sd(N, N1 + 1))) x V .
-    eq [X]  : X(N1, N) x V  = (I(N1) (x) (|0><1| + |1><0|) (x) I(sd(N, N1 + 1))) x V .
-    eq [Y]  : Y(N1, N) x V  = (I(N1) (x) ((0,0,-1,0) . |0><1| + (0,0,1,0) . |1><0|) (x) I(sd(N, N1 + 1))) x V .
-    eq [Z]  : Z(N1, N) x V  = (I(N1) (x) (|0><0| + (-1,0,0,0) . |1><1|) (x) I(sd(N, N1 + 1))) x V .
+    eq [P0] : P0(N1, N) x V = (I(N1) (x) |0><0| (x) MI(sd(N, N1 + 1))) x V .
+    eq [P1] : P1(N1, N) x V = (I(N1) (x) |1><1| (x) MI(sd(N, N1 + 1))) x V .
+    eq [X]  : X(N1, N) x V  = (I(N1) (x) (|0><1| + |1><0|) (x) MI(sd(N, N1 + 1))) x V .
+    eq [Y]  : Y(N1, N) x V  = (I(N1) (x) ((0,0,-1,0) . |0><1| + (0,0,1,0) . |1><0|) (x) MI(sd(N, N1 + 1))) x V .
+    eq [Z]  : Z(N1, N) x V  = (I(N1) (x) (|0><0| + (-1,0,0,0) . |1><1|) (x) MI(sd(N, N1 + 1))) x V .
     --- H: ignore 1/sqrt(2) factor
-    eq [H]  : H(N1, N) x V  = (I(N1) (x) (|0><0| + |0><1| + |1><0| + (-1,0,0,0) . |1><1|) (x) I(sd(N, N1 + 1))) x V .
-    eq [S]  : S(N1, N) x V  = (I(N1) (x) (|0><0| + (0,0,1,0) . |1><1|) (x) I(sd(N, N1 + 1))) x V .
-    eq [T]  : T(N1, N) x V  = (I(N1) (x) (|0><0| + (0,1,0,0) . |1><1|) (x) I(sd(N, N1 + 1))) x V .
+    eq [H]  : H(N1, N) x V  = (I(N1) (x) (|0><0| + |0><1| + |1><0| + (-1,0,0,0) . |1><1|) (x) MI(sd(N, N1 + 1))) x V .
+    eq [S]  : S(N1, N) x V  = (I(N1) (x) (|0><0| + (0,0,1,0) . |1><1|) (x) MI(sd(N, N1 + 1))) x V .
+    eq [T]  : T(N1, N) x V  = (I(N1) (x) (|0><0| + (0,1,0,0) . |1><1|) (x) MI(sd(N, N1 + 1))) x V .
     --- Rx[pi/2]: ignore 1/sqrt(2) factor
-    eq [Rx] : Rx(N1, N) x V  = (I(N1) (x) (|0><0| + (0,0,-1,0) . |0><1| + (0,0,-1,0) . |1><0| + |1><1|) (x) I(sd(N, N1 + 1))) x V .
+    eq [Rx] : Rx(N1, N) x V  = (I(N1) (x) (|0><0| + (0,0,-1,0) . |0><1| + (0,0,-1,0) . |1><0| + |1><1|) (x) MI(sd(N, N1 + 1))) x V .
     --- Ry[pi/2]: ignore 1/sqrt(2) factor
-    eq [Ry] : Ry(N1, N) x V  = (I(N1) (x) (|0><0| + (-1,0,0,0) . |0><1| + |1><0| + |1><1|) (x) I(sd(N, N1 + 1))) x V .
+    eq [Ry] : Ry(N1, N) x V  = (I(N1) (x) (|0><0| + (-1,0,0,0) . |0><1| + |1><0| + |1><1|) (x) MI(sd(N, N1 + 1))) x V .
     --- Rz[pi/2]: ignore 1/sqrt(2) factor
-    eq [Rz] : Rz(N1, N) x V  = (I(N1) (x) ((1,0,-1,0) . |0><0| + (1,0,1,0) . |1><1|) (x) I(sd(N, N1 + 1))) x V .
+    eq [Rz] : Rz(N1, N) x V  = (I(N1) (x) ((1,0,-1,0) . |0><0| + (1,0,1,0) . |1><1|) (x) MI(sd(N, N1 + 1))) x V .
 
     --- two-qubit gates
     eq [CX]    : CX(N1, N2, N) x V   = (P0(N1, N) + (X(N2, N) x P1(N1, N))) x V .
@@ -334,6 +337,8 @@ fmod QC is
     op [_,_,_,_] : GateList Vect Nat Nat -> Comp .
     op [_,_] : Vect Float -> Comp .
     op getVect : Comp -> Vect .
+    op analyze : Comp -> Comp .
+    op getProb : Comp -> Float .
     op getProb : Comp Vect -> Float .
     op analyze : Comp Vect -> Comp .
     
@@ -345,8 +350,10 @@ fmod QC is
     var F : Float .
 
     eq [GL, V] = [GL, V, sizeV(V), 0] .
-    --- eq [nil, V, N, N'] = [V, || V ||^2 /f (2.0 ^f float(N'))] .
+    --- eq [nil, V, N, N'] = [V, calProb*(< V, V >, N')] .
     eq getVect([nil, V, N, N']) = V .
+    eq getProb([nil, V, N, N']) = calProb*(< V, V >, N') .
+    eq analyze([nil, V, N, N']) = [V, calProb*(< V, V >, N')] .
     eq getProb([nil, V, N, N'], V') = calProb(getScalar(V, V'), N') .
     eq analyze([nil, V, N, N'], V') = [V, calProb(getScalar(V, V'), N')] .
     --- single-qubit gates

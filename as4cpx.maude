@@ -1,3 +1,5 @@
+in debug.maude
+
 fmod FLOAT-RENAME is
     pr FLOAT * (
         op -_ : Float -> Float to -f_,
@@ -121,11 +123,12 @@ fmod CPX is
     op _^* : NzCpx -> NzCpx [prec 29] .
     op calProb : Cpx Nat -> Float .
     op calProb* : Cpx Nat -> Float .
-    
+
     vars C : Cpx .
     vars I I1 I2 I3 I4 : Int .
     vars I' I1' I2' I3' I4' : Int .
-    vars N N1 N2 : Nat .
+    vars N N' : Nat .
+    vars R1 R2 R3 R4 : Rat .
     
     eq (I1, I2, I3, I4) + (I1', I2', I3', I4') = (I1 + I1', I2 + I2', I3 + I3', I4 + I4') .
     eq (I1, I2, I3, I4) * (I1', I2', I3', I4') 
@@ -134,18 +137,29 @@ fmod CPX is
         (I1 * I3') + (I2 * I2') + (I3 * I1') + (- I4 * I4'),
         (I1 * I4') + (I2 * I3') + (I3 * I2') + (I4 * I1') 
         ) .
+    eq (I1, I2, I3, I4)^* = (I1, - I4, - I3, - I2) .
     ---
     eq toFloat((I1, 0, 0, 0)) = float(I1) .
     ceq toFloat((I1, I2, 0, I4)) = float(I1) +f (sqrtf(2.0) *f float(I2)) if I2 == - I4 .
     eq toFloat((I1, I2, I3, I4)) = errF [owise] .
-    eq (I1, I2, I3, I4)^* = (I1, - I4, - I3, - I2) .
     eq toCpxS((I1, I2, I3, I4)) = (float(I1) +f ((float(I2) /f sqrtf(2.0)) -f (float(I4) /f sqrtf(2.0)))) +
                                   (((float(I2) /f sqrtf(2.0)) +f float(I3)) +f (float(I4) /f sqrtf(2.0))) i .
     --- calculate probability
-    eq calProb((I1, 0, 0, 0), N) = float(abs(I1)) /f (sqrtf(2.0) ^f float(N)) [print "1st(" I1 ",0,0,0)"] .
-    eq calProb((I1, I2, I3, I4), N) = calProb*((I1, I2, I3, I4), N) [owise print "2nd(" I1 "," I2 "," I3 "," I4 ")"] .
-    ceq calProb*((I1, I2, I3, I4), N) = ((toFloat((I1, I2, I3, I4) * (I1, I2, I3, I4)^*) /f (2.0 ^f float(N1))) /f (2.0 ^f float(N2)))
-    if N1 := N quo 2 /\ N2 := N - N1 .
+    --- C in C.V
+    eq calProb((I1, 0, 0, 0), N) = float(I1 * (I1 / (2 ^ N))) .
+    ceq calProb((I1, I2, I3, I4), N) = 
+        float(I1 * R1 + I2 * R2 + I3 * R3 + I4 * R4) +f 
+        (sqrtf(2.0) *f float(((R1 * (I2 - I4)) + (R2 * I3) + (R3 * I4))))
+    if N' := 2 ^ N
+    /\ R1 := I1 / N'
+    /\ R2 := I2 / N'
+    /\ R3 := I3 / N'
+    /\ R4 := I4 / N' [owise] .
+    --- |C|^2 in C.V
+    eq calProb*((I1, 0, 0, 0), N) = float(I1 / (2 ^ N)) .
+    ceq calProb*((I1, I2, 0, I4), N) = float(I1 / N') +f (sqrtf(2.0) *f float(I2 / N')) 
+    if I2 == - I4 /\ N' := 2 ^ N .
+    eq calProb*((I1, I2, I3, I4), N) = errF [owise] .
     --- symbolic reasoning for integers
     eq I * 0 = 0 .
     eq I + 0 = I .
