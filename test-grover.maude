@@ -24,7 +24,8 @@ fmod GROVER is
     op groverProg : Vect -> GateList .
     op groverProg : Nat Vect Nat -> GateList .
     ceq groverProg(V) = groverProg(N, V, rat(floorf((pi *f sqrtf(float(2 ^ N))) /f 4.0))) if N := sizeV(V) .
-    eq groverProg(N, V, N') = applyH(N) groverOp(N, V, N') projection(V, 0) .
+    eq groverProg(N, V, N') = applyH(N) groverOp(N, V, N') .
+    --- eq groverProg(N, V, N') = applyH(N) groverOp(N, V, N') projection(V, 0) .
     
     --- grover operator
     op groverOp : Nat Vect Nat -> GateList .
@@ -67,4 +68,4 @@ fmod GROVER is
     eq projection(|1>, N) = P1(N) .
 endfm
 
-red [groverProg(sol), init(sol)] .
+red analyze([groverProg(sol), init(sol)], sol) .

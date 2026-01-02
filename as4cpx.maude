@@ -102,8 +102,10 @@ endfm
 
 fmod CPX is
     pr CPX-STANDARD .
-    sorts ZeroCpx NzCpx Cpx .
-    subsort ZeroCpx NzCpx < Cpx .
+    sorts ZeroCpx NzCpx Cpx ErrCpx Cpx&Err .
+    subsorts ZeroCpx NzCpx < Cpx .
+    subsorts Cpx ErrCpx < Cpx&Err .
+    op errCpx : -> ErrCpx [ctor] .
     op toCpxS : Cpx -> CpxS .
     op toFloat : Cpx -> Float&Err .
     op (_,_,_,_) : Zero Zero Zero Zero -> ZeroCpx [ctor] .
@@ -117,10 +119,14 @@ fmod CPX is
     op _*_ : NzCpx NzCpx -> NzCpx [ditto] .
     op _^* : Cpx -> Cpx [prec 29] .
     op _^* : NzCpx -> NzCpx [prec 29] .
+    op calProb : Cpx Nat -> Float .
+    op calProb* : Cpx Nat -> Float .
     
     vars C : Cpx .
     vars I I1 I2 I3 I4 : Int .
     vars I' I1' I2' I3' I4' : Int .
+    vars N N1 N2 : Nat .
+    
     eq (I1, I2, I3, I4) + (I1', I2', I3', I4') = (I1 + I1', I2 + I2', I3 + I3', I4 + I4') .
     eq (I1, I2, I3, I4) * (I1', I2', I3', I4') 
     = ((I1 * I1') + (- I2 * I4') + (- I3 * I3') + (- I4 * I2'),
@@ -135,6 +141,11 @@ fmod CPX is
     eq (I1, I2, I3, I4)^* = (I1, - I4, - I3, - I2) .
     eq toCpxS((I1, I2, I3, I4)) = (float(I1) +f ((float(I2) /f sqrtf(2.0)) -f (float(I4) /f sqrtf(2.0)))) +
                                   (((float(I2) /f sqrtf(2.0)) +f float(I3)) +f (float(I4) /f sqrtf(2.0))) i .
+    --- calculate probability
+    eq calProb((I1, 0, 0, 0), N) = float(abs(I1)) /f (sqrtf(2.0) ^f float(N)) [print "1st(" I1 ",0,0,0)"] .
+    eq calProb((I1, I2, I3, I4), N) = calProb*((I1, I2, I3, I4), N) [owise print "2nd(" I1 "," I2 "," I3 "," I4 ")"] .
+    ceq calProb*((I1, I2, I3, I4), N) = ((toFloat((I1, I2, I3, I4) * (I1, I2, I3, I4)^*) /f (2.0 ^f float(N1))) /f (2.0 ^f float(N2)))
+    if N1 := N quo 2 /\ N2 := N - N1 .
     --- symbolic reasoning for integers
     eq I * 0 = 0 .
     eq I + 0 = I .

@@ -227,8 +227,23 @@ fmod MAT is
     eq [mul-MM3] : (I (x) M1) x (I (x) M2) = I (x) (M1 x M2) .
 endfm
 
-fmod GATE is
+fmod QUERY is
     pr MAT .
+
+    vars V V' V1 V2 : Vect .
+    vars K K' : BKet .
+    vars C1 C2 : NzCpx .
+    
+    op getScalar : Vect Vect -> Cpx&Err .
+    eq getScalar(|0> (x) V1 + |1> (x) V2, K (x) V) = if K == |0> then getScalar(V1, V) else getScalar(V2, V) fi .
+    eq getScalar(K (x) V, K' (x) V') = if K == K' then getScalar(V, V') else (0,0,0,0) fi .
+    eq getScalar(C1 . |0> + C2 . |1>, K) = if K == |0> then C1 else C2 fi .
+    eq getScalar(C1 . K, K') = if K == K' then C1 else (0,0,0,0) fi .
+    eq getScalar(V, V') = errCpx [owise] .
+endfm
+
+fmod GATE is
+    pr QUERY .
     pr NAT-LIST .
 
     sorts ErrNat Nat&Err Gate GateParam .
@@ -319,7 +334,8 @@ fmod QC is
     op [_,_,_,_] : GateList Vect Nat Nat -> Comp .
     op [_,_] : Vect Float -> Comp .
     op getVect : Comp -> Vect .
-    op getProb : Comp -> Float .
+    op getProb : Comp Vect -> Float .
+    op analyze : Comp Vect -> Comp .
     
     vars N N' N1 N2 N3 : Nat .
     vars NL : NatList .
@@ -329,11 +345,10 @@ fmod QC is
     var F : Float .
 
     eq [GL, V] = [GL, V, sizeV(V), 0] .
-    eq [nil, V, N, N'] = [V, || V ||^2 /f (2.0 ^f float(N'))] .
-    --- eq getVect([nil, V, N, N']) = V .
-    --- eq getProb([nil, V, N, N']) = || V ||^2 /f (2.0 ^f float(N')) .
-    eq getVect([V, F]) = V .
-    eq getProb([V, F]) = F .
+    --- eq [nil, V, N, N'] = [V, || V ||^2 /f (2.0 ^f float(N'))] .
+    eq getVect([nil, V, N, N']) = V .
+    eq getProb([nil, V, N, N'], V') = calProb(getScalar(V, V'), N') .
+    eq analyze([nil, V, N, N'], V') = [V, calProb(getScalar(V, V'), N')] .
     --- single-qubit gates
     ceq [P0(N1) GL, V, N, N'] = [GL, V', N, N']     if V' := P0(N1, N) x V .
     ceq [P1(N1) GL, V, N, N'] = [GL, V', N, N']     if V' := P1(N1, N) x V .
