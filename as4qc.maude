@@ -278,14 +278,14 @@ fmod GATE is
     --- quantum gates
     ops P0 P1 X Y Z H S T Rx Ry Rz : Nat -> Gate .
     ops CX CY CZ SWAP : Nat Nat -> Gate .
-    ops CCX CCZ CSWAP : Nat Nat Nat -> Gate .
-    ops MCX MCZ : NatList Nat -> Gate .
+    ops CCX CCY CCZ CSWAP : Nat Nat Nat -> Gate .
+    ops MCX MCY MCZ : NatList Nat -> Gate .
     op  MCSWAP : NatList Nat Nat -> Gate .
     --- quantum gates with an additional parameter of the size of the quantum state
     ops P0 P1 X Y Z H S T Rx Ry Rz : Nat Nat -> GateParam .
     ops CX CY CZ SWAP : Nat Nat Nat -> GateParam .
-    ops CCX CCZ CSWAP : Nat Nat Nat Nat -> GateParam .
-    ops MCX MCZ : NatList Nat Nat -> GateParam .
+    ops CCX CCY CCZ CSWAP : Nat Nat Nat Nat -> GateParam .
+    ops MCX MCY MCZ : NatList Nat Nat -> GateParam .
     op  MCSWAP : NatList Nat Nat Nat -> GateParam .
 
     --- single-qubit gates
@@ -313,12 +313,15 @@ fmod GATE is
 
     --- three-qubit gates
     eq [CCX]   : CCX(N1, N2, N3, N) x V   = (P0(N1, N) + (CX(N2, N3, N) x P1(N1, N))) x V .
+    eq [CCY]   : CCY(N1, N2, N3, N) x V   = (P0(N1, N) + (CY(N2, N3, N) x P1(N1, N))) x V .
     eq [CCZ]   : CCZ(N1, N2, N3, N) x V   = (P0(N1, N) + (CZ(N2, N3, N) x P1(N1, N))) x V .
     eq [CSWAP] : CSWAP(N1, N2, N3, N) x V = (P0(N1, N) + (SWAP(N2, N3, N) x P1(N1, N))) x V .
 
     --- multiple qubit gates
     eq [MCX]    : MCX(N1 NL, N2, N) x V = (P0(N1, N) + (MCX(NL, N2, N) x P1(N1, N))) x V .
     eq [MCX]    : MCX(nil, N2, N) x V = X(N2, N) x V .
+    eq [MCY]    : MCY(N1 NL, N2, N) x V = (P0(N1, N) + (MCY(NL, N2, N) x P1(N1, N))) x V .
+    eq [MCY]    : MCY(nil, N2, N) x V = Y(N2, N) x V .
     eq [MCZ]    : MCZ(N1 NL, N2, N) x V = (P0(N1, N) + (MCZ(NL, N2, N) x P1(N1, N))) x V .
     eq [MCZ]    : MCZ(nil, N2, N) x V = Z(N2, N) x V .
     eq [MCSWAP] : MCSWAP(N1 NL, N2, N3, N) x V = (P0(N1, N) + (MCSWAP(NL, N2, N3, N) x P1(N1, N))) x V .
@@ -333,6 +336,7 @@ fmod QC is
     pr LIST{Gate} * (sort NeList{Gate} to NeGateList, sort List{Gate} to GateList) .
     
     sort Comp .
+
     op [_,_] : GateList Vect -> Comp .
     op [_,_,_,_] : GateList Vect Nat Nat -> Comp .
     op [_,_] : Vect Float -> Comp .
@@ -376,9 +380,11 @@ fmod QC is
     --- three-qubit gates
     ceq [CCX(N1, N2, N3) GL, V, N, N']   = [GL, V', N, N'] if V' := CCX(N1, N2, N3, N) x V .
     ceq [CCZ(N1, N2, N3) GL, V, N, N']   = [GL, V', N, N'] if V' := CCZ(N1, N2, N3, N) x V .
+    ceq [CCY(N1, N2, N3) GL, V, N, N']   = [GL, V', N, N'] if V' := CCY(N1, N2, N3, N) x V .
     ceq [CSWAP(N1, N2, N3) GL, V, N, N'] = [GL, V', N, N'] if V' := CSWAP(N1, N2, N3, N) x V .
     --- multiple-qubit gates
     ceq [MCX(NL, N1) GL, V, N, N']        = [GL, V', N, N'] if V' := MCX(NL, N1, N) x V .
+    ceq [MCY(NL, N1) GL, V, N, N']        = [GL, V', N, N'] if V' := MCY(NL, N1, N) x V .
     ceq [MCZ(NL, N1) GL, V, N, N']        = [GL, V', N, N'] if V' := MCZ(NL, N1, N) x V .
     ceq [MCSWAP(NL, N1, N2) GL, V, N, N'] = [GL, V', N, N'] if V' := MCSWAP(NL, N1, N2, N) x V .
 endfm

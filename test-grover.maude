@@ -71,10 +71,10 @@ fmod GROVER is
 endfm
 
 --- without using projections (default)
-red getProb([groverProg(sol), init(sol)], sol) .
+--- red getProb([groverProg(sol), init(sol)], sol) .
 --- red getProb([groverProg(sol10), init(sol10)], sol10) .
 --- red getProb([groverProg(sol15), init(sol15)], sol15) .
---- red getProb([groverProg(sol20), init(sol20)], sol20) .
+red getProb([groverProg(sol20), init(sol20)], sol20) .
 
 --- using projections
 --- red analyze([groverProg(sol), init(sol)]) .
