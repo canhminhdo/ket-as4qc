@@ -124,7 +124,7 @@ fmod CPX is
     op calProb : Cpx Nat -> Float .
     op calProb* : Cpx Nat -> Float .
 
-    vars C : Cpx .
+    vars C C1 C2 : Cpx .
     vars I I1 I2 I3 I4 : Int .
     vars I' I1' I2' I3' I4' : Int .
     vars N N' : Nat .
@@ -169,4 +169,6 @@ fmod CPX is
     eq C * (0,0,0,0) = (0,0,0,0) .
     eq C + (0,0,0,0) = C .
     eq C * (1,0,0,0) = C .
+    eq (C1 + C2)^* = (C1)^* + (C2)^* .
+    eq (C1 * C2)^* = (C1)^* * (C2)^* .
 endfm

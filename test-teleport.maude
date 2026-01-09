@@ -1,6 +1,6 @@
 in as4qc.maude
 
-fmod TEST is
+fmod TELEPORT is
     pr QC .
     ops a b : -> NzCpx .
     op |psi> : -> Vect .
