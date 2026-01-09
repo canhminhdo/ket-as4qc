@@ -1,0 +1,81 @@
+in ../as4qc.maude
+
+fmod GROVER is
+    pr QC .
+
+    vars N N' : Nat .
+    vars V : Vect .
+    vars K : BKet .
+
+    --- solution
+    ops sol sol5 sol10 sol15 sol20 : -> Vect .
+    eq sol = |1> (x) |1> (x) |0> (x) |0> (x) |0> .
+    eq sol5 = |1> (x) |1> (x) |0> (x) |0> (x) |0> .
+    eq sol10 = |0> (x) |1> (x) |0> (x) |1> (x) |1> (x) |0> (x) |1> (x) |0> (x) |0> (x) |1> .
+    eq sol15 = |1> (x) |1> (x) |0> (x) |0> (x) |0> (x) |0> (x) |0> (x) |0> (x) |1> (x) |1> (x) |0> (x) |1> (x) |0> (x) |1> (x) |0> .
+    eq sol20 = |0> (x) |0> (x) |0> (x) |0> (x) |1> (x) |0> (x) |1> (x) |0> (x) |1> (x) |1> (x) |1> (x) |0> (x) |1> (x) |1> (x) |0> (x) |0> (x) |0> (x) |0> (x) |0> (x) |0> .
+    
+    --- initial state
+    op init : Vect -> Vect .
+    eq init(K (x) V) = |0> (x) init(V) .
+    eq init(K) = |0> .
+    
+    --- grover program
+    op groverProg : Vect -> GateList .
+    op groverProg : Nat Vect Nat -> GateList .
+    ceq groverProg(V) = groverProg(N, V, rat(floorf((pi *f sqrtf(float(2 ^ N))) /f 4.0))) if N := sizeV(V) .
+    --- without using projections
+    eq groverProg(N, V, N') = applyH(N) groverOp(N, V, N') .
+    --- using projections are unnecessary
+    --- eq groverProg(N, V, N') = applyH(N) groverOp(N, V, N') projection(V, 0) .
+    
+    --- grover operator
+    op groverOp : Nat Vect Nat -> GateList .
+    ceq groverOp(N, V, N') = oracle(V, N) diffusion(V, N) groverOp(N, V, sd(N',1)) if N' > 0 .
+    eq groverOp(N, V, 0) = nil .
+    
+    --- Hadamard transformation
+    op applyH : Nat -> GateList .
+    ceq applyH(N) = applyH(sd(N,1)) H(sd(N,1)) if N > 0 .
+    eq applyH(0) = nil .
+
+    --- X transformation
+    op applyX : Nat -> GateList .
+    ceq applyX(N) = applyX(sd(N,1)) X(sd(N,1)) if N > 0 .
+    eq applyX(0) = nil .
+
+    --- oracle
+    op oracle : Vect Nat -> GateList .
+    eq oracle(V, N) = applyX?(V, 0) H(sd(N, 1)) MCX(mkList(sd(N, 1)), sd(N, 1)) H(sd(N, 1)) applyX?(V, 0) .
+    ---
+    op mkList : Nat -> NatList .
+    ceq mkList(N) = mkList(sd(N,1)) sd(N,1) if N > 0 . 
+    eq mkList(0) = nil .
+    ---
+    op applyX? : Vect Nat -> GateList .
+    eq applyX?(|0> (x) V, N) = X(N) applyX?(V, N + 1) .
+    eq applyX?(|1> (x) V, N) = applyX?(V, N + 1) .
+    eq applyX?(|0>, N) = X(N) .
+    eq applyX?(|1>, N) = nil .
+
+    --- diffusion
+    op diffusion : Vect Nat -> GateList .
+    eq diffusion(V, N) = applyH(N) applyX(N) H(sd(N, 1)) MCX(mkList(sd(N, 1)), sd(N, 1)) H(sd(N, 1)) applyX(N) applyH(N) .
+
+    --- projection
+    op projection : Vect Nat -> GateList .
+    eq projection(|0> (x) V, N) = P0(N) projection(V, N + 1) .
+    eq projection(|1> (x) V, N) = P1(N) projection(V, N + 1) .
+    eq projection(|0>, N) = P0(N) .
+    eq projection(|1>, N) = P1(N) .
+endfm
+
+red getProb([groverProg(sol), init(sol)], sol) .
+--- red getProb([groverProg(sol10), init(sol10)], sol10) .
+--- red getProb([groverProg(sol15), init(sol15)], sol15) .
+--- red getProb([groverProg(sol20), init(sol20)], sol20) .
+
+red analyze([groverProg(sol), init(sol)], sol) .
+--- red analyze([groverProg(sol10), init(sol10)], sol10) .
+--- red analyze([groverProg(sol15), init(sol15)], sol15) .
+--- red analyze([groverProg(sol20), init(sol20)], sol20) .

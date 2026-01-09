@@ -1,5 +1,12 @@
 in ../as4qc.maude
 
+fmod ENTANGLE-SWAP is
+    pr QC .
+
+    op EPR : -> Vect .
+    eq EPR = |0> (x) |0> + |1> (x) |1> .
+endfm
+
 red analyze([
     H(0) CX(0, 1) H(2) CX(2, 3) CX(1, 2) H(1)
     (P0(2) U (P1(2) X(3)))
@@ -7,3 +14,10 @@ red analyze([
     SWAP(0,2),
     |0> (x) |0> (x) |0> (x) |0>
 ]) .
+
+red check([
+    H(0) CX(0, 1) H(2) CX(2, 3) CX(1, 2) H(1)
+    (P0(2) U (P1(2) X(3)))
+    (P0(1) U (P1(1) Z(3))),
+    |0> (x) |0> (x) |0> (x) |0>
+], P(0, 3, EPR)) .

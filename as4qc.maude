@@ -250,8 +250,8 @@ fmod GATE is
     subsorts Gate GateParam < Mat .
 
     op I  : Nat -> Mat .
-    op MI : Nat -> Mat .
-    op sizeV : Vect -> Nat .
+    op II : Nat -> Mat .
+    op sizeV : Vect -> Nat&Err  .
     op errNat : -> ErrNat [ctor] .
 
     vars N N1 N2 N3 : Nat .
@@ -265,15 +265,14 @@ fmod GATE is
 
     eq  [I1] : I(0) (x) M = M .
     eq  [I2] : M (x) I(0) = M .
-    eq  [I3] : M (x) MI(0) = M .
-    eq  [I4] : MI(Nz) x V = V .
+    eq  [I3] : M (x) II(0) = M .
+    eq  [I4] : II(Nz) x V = V .
     ceq [I5] : I(N) = I (x) I(sd(N,1)) if N > 0 .
 
-    eq  [size1]  : sizeV(K) = 1 .
-    eq  [size2]  : sizeV(C . V) = sizeV(V) .
-    ceq [size3]  : sizeV(V1 + V2) = sizeV(V1) if sizeV(V1) == sizeV(V2) .
-    ceq [size3E] : sizeV(V1 + V2) = errNat if sizeV(V1) =/= sizeV(V2) .
-    eq  [size4]  : sizeV(V1 (x) V2) = sizeV(V1) + sizeV(V2) .
+    eq [size1]  : sizeV(K) = 1 .
+    eq [size2]  : sizeV(C . V) = sizeV(V) .
+    eq [size3]  : sizeV(V1 + V2) = if sizeV(V1) == sizeV(V2) then sizeV(V1) else errNat fi .
+    eq [size4]  : sizeV(V1 (x) V2) = sizeV(V1) + sizeV(V2) .
 
     --- quantum gates
     ops P0 P1 X Y Z H S T Rx Ry Rz : Nat -> Gate .
@@ -289,21 +288,21 @@ fmod GATE is
     op  MCSWAP : NatList Nat Nat Nat -> GateParam .
 
     --- single-qubit gates
-    eq [P0] : P0(N1, N) x V = (I(N1) (x) |0><0| (x) MI(sd(N, N1 + 1))) x V .
-    eq [P1] : P1(N1, N) x V = (I(N1) (x) |1><1| (x) MI(sd(N, N1 + 1))) x V .
-    eq [X]  : X(N1, N) x V  = (I(N1) (x) (|0><1| + |1><0|) (x) MI(sd(N, N1 + 1))) x V .
-    eq [Y]  : Y(N1, N) x V  = (I(N1) (x) ((0,0,-1,0) . |0><1| + (0,0,1,0) . |1><0|) (x) MI(sd(N, N1 + 1))) x V .
-    eq [Z]  : Z(N1, N) x V  = (I(N1) (x) (|0><0| + (-1,0,0,0) . |1><1|) (x) MI(sd(N, N1 + 1))) x V .
+    eq [P0] : P0(N1, N) x V = (I(N1) (x) |0><0| (x) II(sd(N, N1 + 1))) x V .
+    eq [P1] : P1(N1, N) x V = (I(N1) (x) |1><1| (x) II(sd(N, N1 + 1))) x V .
+    eq [X]  : X(N1, N) x V  = (I(N1) (x) (|0><1| + |1><0|) (x) II(sd(N, N1 + 1))) x V .
+    eq [Y]  : Y(N1, N) x V  = (I(N1) (x) ((0,0,-1,0) . |0><1| + (0,0,1,0) . |1><0|) (x) II(sd(N, N1 + 1))) x V .
+    eq [Z]  : Z(N1, N) x V  = (I(N1) (x) (|0><0| + (-1,0,0,0) . |1><1|) (x) II(sd(N, N1 + 1))) x V .
     --- H: ignore 1/sqrt(2) factor
-    eq [H]  : H(N1, N) x V  = (I(N1) (x) (|0><0| + |0><1| + |1><0| + (-1,0,0,0) . |1><1|) (x) MI(sd(N, N1 + 1))) x V .
-    eq [S]  : S(N1, N) x V  = (I(N1) (x) (|0><0| + (0,0,1,0) . |1><1|) (x) MI(sd(N, N1 + 1))) x V .
-    eq [T]  : T(N1, N) x V  = (I(N1) (x) (|0><0| + (0,1,0,0) . |1><1|) (x) MI(sd(N, N1 + 1))) x V .
+    eq [H]  : H(N1, N) x V  = (I(N1) (x) (|0><0| + |0><1| + |1><0| + (-1,0,0,0) . |1><1|) (x) II(sd(N, N1 + 1))) x V .
+    eq [S]  : S(N1, N) x V  = (I(N1) (x) (|0><0| + (0,0,1,0) . |1><1|) (x) II(sd(N, N1 + 1))) x V .
+    eq [T]  : T(N1, N) x V  = (I(N1) (x) (|0><0| + (0,1,0,0) . |1><1|) (x) II(sd(N, N1 + 1))) x V .
     --- Rx[pi/2]: ignore 1/sqrt(2) factor
-    eq [Rx] : Rx(N1, N) x V  = (I(N1) (x) (|0><0| + (0,0,-1,0) . |0><1| + (0,0,-1,0) . |1><0| + |1><1|) (x) MI(sd(N, N1 + 1))) x V .
+    eq [Rx] : Rx(N1, N) x V  = (I(N1) (x) (|0><0| + (0,0,-1,0) . |0><1| + (0,0,-1,0) . |1><0| + |1><1|) (x) II(sd(N, N1 + 1))) x V .
     --- Ry[pi/2]: ignore 1/sqrt(2) factor
-    eq [Ry] : Ry(N1, N) x V  = (I(N1) (x) (|0><0| + (-1,0,0,0) . |0><1| + |1><0| + |1><1|) (x) MI(sd(N, N1 + 1))) x V .
+    eq [Ry] : Ry(N1, N) x V  = (I(N1) (x) (|0><0| + (-1,0,0,0) . |0><1| + |1><0| + |1><1|) (x) II(sd(N, N1 + 1))) x V .
     --- Rz[pi/2]: ignore 1/sqrt(2) factor
-    eq [Rz] : Rz(N1, N) x V  = (I(N1) (x) ((1,0,-1,0) . |0><0| + (1,0,1,0) . |1><1|) (x) MI(sd(N, N1 + 1))) x V .
+    eq [Rz] : Rz(N1, N) x V  = (I(N1) (x) ((1,0,-1,0) . |0><0| + (1,0,1,0) . |1><1|) (x) II(sd(N, N1 + 1))) x V .
 
     --- two-qubit gates
     eq [CX]    : CX(N1, N2, N) x V   = (P0(N1, N) + (X(N2, N) x P1(N1, N))) x V .
@@ -349,7 +348,6 @@ fmod COMP is
     var F : Float .
 
     eq [GL, V] = [GL, V, sizeV(V), 0] .
-    --- eq [nil, V, N, N'] = [V, calProb*(< V, V >, N')] .
     --- single-qubit gates
     ceq [P0(N1) GL, V, N, N'] = [GL, V', N, N']     if V' := P0(N1, N) x V .
     ceq [P1(N1) GL, V, N, N'] = [GL, V', N, N']     if V' := P1(N1, N) x V .
@@ -383,27 +381,83 @@ view Comp from TRIV to COMP is
     sort Elt to Comp .
 endv
 
+fmod FORMULA is
+    pr COMP .
+    sort Formula .
+    op P : Nat Vect -> Formula [ctor] .
+    op P : Nat Nat Vect -> Formula [ctor] .
+    op _and_ : Formula Formula -> Formula [comm assoc prec 55] .
+    op _or_ : Formula Formula -> Formula [assoc comm prec 59] .
+    op not_ : Formula -> Formula [prec 53] .
+endfm
+
 fmod QC is
+    pr FORMULA .
     pr SET{Comp} * (sort NeSet{Comp} to NeCompSet, sort Set{Comp} to CompSet) .
     
     op _U_ : GateList GateList -> GateList .
-    op analyze : Comp -> Comp .
-    op analyze : Comp Vect -> Comp .
-    op analyze : CompSet -> CompSet .
-    op analyze : CompSet Vect -> CompSet .
+    op analyze  : CompSet -> CompSet .
+    op analyze  : CompSet Vect -> CompSet .
+    op analyze* : Comp -> Comp .
+    op analyze* : Comp Vect -> Comp .
+    op check    : CompSet Formula -> CompSet .
+    op check*   : Comp Formula -> Bool .
+    op getProb  : Comp -> Float .
+    op getProb  : Comp Vect -> Float .
 
-    var NeCS : CompSet .
-    vars N N' : Nat .
-    vars V V' : Vect .
+    var CS : CompSet .
+    vars N N' N1 N2 : Nat .
+    vars M : Mat .
+    vars V V' V1 V2 : Vect .
     vars GL GL1 GL2 : GateList .
-    var F : Float .
-    var C : Comp .
+    vars BK1 BK2 : BraKet .
+    vars C : NzCpx .
+    vars F F1 F2 : Formula .
 
+    --- nondeterministic choices
     eq [(GL1 U GL2) GL, V, N, N'] = [GL1 GL, V, N, N'] , [GL2 GL, V, N, N'] .
-    eq analyze([nil, V, N, N']) = [V, calProb*(< V, V >, N')] .
-    eq analyze([nil, V, N, N'], V') = [V, calProb(getScalar(V, V'), N')] .
-    eq analyze(([nil, V, N, N'], NeCS)) = analyze([nil, V, N, N']), analyze(NeCS) .
+    
+    --- analyze
+    eq analyze(([nil, V, N, N'], CS)) = analyze*([nil, V, N, N']), analyze(CS) .
     eq analyze(empty) = empty .
-    eq analyze(([nil, V, N, N'], NeCS), V') = analyze([nil, V, N, N'], V'), analyze(NeCS) .
+    eq analyze(([nil, V, N, N'], CS), V') = analyze*([nil, V, N, N'], V'), analyze(CS) .
     eq analyze(empty, V') = empty .
+    eq analyze*([nil, V, N, N']) = [V, calProb*(< V, V >, N')] .
+    eq analyze*([nil, V, N, N'], V') = [V, calProb(getScalar(V, V'), N')] .
+
+    --- get probability
+    eq getProb([nil, V, N, N']) = calProb*(< V, V >, N') .
+    eq getProb([nil, V, N, N'], V') = calProb(getScalar(V, V'), N') .
+
+    --- check
+    eq check(([nil, V, N, N'], CS), F) = if check*([nil, V, N, N'], F) then empty else [V, calProb*(< V, V >, N')] fi, check(CS, F) .
+    eq check(empty, F) = empty .
+    eq check(([nil, V, N, N'], CS), F) = if check*([nil, V, N, N'], F) then empty else [V, calProb*(< V, V >, N')] fi, check(CS, F) .
+    eq check(empty, F) = empty .
+    eq check*([nil, V, N, N'], F1 and F2) = check*([nil, V, N, N'], F1) and check*([nil, V, N, N'], F2) .
+    eq check*([nil, V, N, N'], F1 or F2) = check*([nil, V, N, N'], F1) or check*([nil, V, N, N'], F2) .
+    eq check*([nil, V, N, N'], not F) = not check*([nil, V, N, N'], F) .
+    eq check*([nil, V, N, N'], P(N1, V')) = P(V, N1, N, V') .
+    eq check*([nil, V, N, N'], P(N1, N2, V')) = P(V, N1, N2, N, V') .
+    
+    --- building projectors
+    op buildProjector : Vect Nat Nat -> Mat .
+    op buildProjector : Vect Nat Nat Nat -> Mat .
+    op buildProjector* : Mat Nat Nat Nat -> Mat .
+    eq buildProjector(V, N1, N) = (I(N1) (x) (V x (V)^+) (x) II(sd(N, N1 + 1))) .
+    eq buildProjector(V, N1, N2, N) = buildProjector*(V x (V)^+, N1, N2, N) .
+    eq buildProjector*(BK1 (x) BK2 + M, N1, N2, N) = buildProjector*(BK1 (x) BK2, N1, N2, N) + buildProjector*(M, N1, N2, N) .
+    eq buildProjector*(BK1 (x) BK2, N1, N2, N) = I(N1) (x) BK1 (x) I(sd(N2, N1 + 1)) (x) BK2 (x) II(sd(N, N2 + 1)) .
+    eq buildProjector*(C . BK1 (x) BK2 + M, N1, N2, N) = buildProjector*(C . BK1 (x) BK2, N1, N2, N) + buildProjector*(M, N1, N2, N) .
+    eq buildProjector*(C . BK1 (x) BK2, N1, N2, N) = I(N1) (x) (C . BK1) (x) I(sd(N2, N1 + 1)) (x) BK2 (x) II(sd(N, N2 + 1)) .
+    
+    --- checking the result with projectors
+    op P : Vect Nat Nat Vect -> Bool .
+    op P : Vect Nat Nat Nat Vect -> Bool .
+    ceq P(V, N1, N, V') = V1 == V2  if M := buildProjector(V', N1, N)
+                                    /\ V1 := M x V
+                                    /\ V2 := < V', V' > . V .
+    ceq P(V, N1, N2, N, V') = V1 == V2  if M := buildProjector(V', N1, N2, N)
+                                        /\ V1 := M x V
+                                        /\ V2 := < V', V' > . V .
 endfm

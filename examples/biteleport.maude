@@ -8,9 +8,6 @@ fmod BIDIRECTIONAL_TELEPORT is
     eq |psi2> = (c . |0> + d . |1>) .
     eq a * a ^* + b * b ^* = (1,0,0,0) .
     eq c * c ^* + d * d ^* = (1,0,0,0) .
-    --- additional rules for symbolic reasoning
-    vars C1 C2 C3 : NzCpx .
-    ceq C1 * C2 * (C2)^* + C1 * C3 * (C3)^* = C1 if C2 * (C2)^* + C3 * (C3)^* == (1,0,0,0) .
 endfm
 
 red analyze([
@@ -21,3 +18,12 @@ red analyze([
     (P0(1) U (P1(1) Z(4))), 
     |psi1> (x) |psi2> (x) |0> (x) |0> (x) |0> (x) |0>
 ]) .
+
+red check([
+    H(2) CX(2,3) H(4) CX(4,5) CX(0,2) CX(1,5) H(0) H(1)
+    (P0(2) U (P1(2) X(3)))
+    (P0(0) U (P1(0) Z(3)))
+    (P0(5) U (P1(5) X(4)))
+    (P0(1) U (P1(1) Z(4))), 
+    |psi1> (x) |psi2> (x) |0> (x) |0> (x) |0> (x) |0>
+], P(3, |psi1>) and P(4, |psi2>)) .
