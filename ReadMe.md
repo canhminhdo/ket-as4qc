@@ -1,6 +1,6 @@
 ### An Algebraic Specification for Quantum Computation in Maude
 ---
-This repository presents an Algebraic Specification for Quantum Computation called |AS4QC> which was developed in Maude.
+This repository presents |AS4QC>, an algebraic specification for quantum computation in Maude.
 
 ## Dependencies
 - Maude is a programming/specification language based on rewriting logic. How to download and install Maude can be found at [here](http://maude.cs.illinois.edu/w/index.php/The_Maude_System).
@@ -10,10 +10,10 @@ This repository presents an Algebraic Specification for Quantum Computation call
 
 - Feed a Maude file that is the formal specification of a protocol of interest into Maude.
 
-For example, we can type the following command in CLI in order to see how Quantum Teleportation works:
+For example, we can type the following command in CLI to verify the correctness of Quantum Teleportation:
 
 ```console
-maude teleport.maude
+cd examples && maude teleport.maude
 ```
 
 - For testing, we can test the algebraic speicfication with some test cases provided as follows:
@@ -23,8 +23,10 @@ cd test && ./tester
 ```
 
 ## Repository structure
-- `cpx.maude` for complex number reasoning.
+- `cpx.maude` file for complex number reasoning.
 
-- `qc.maude` for quantum computation reasoning.
+- `qc.maude` file for quantum computation reasoning.
 
-- `teleport.maude` for reasoning about Quantum Teleportation.
+- `examples` folder for case studies.
+
+- `test` folder for testing.
