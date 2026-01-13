@@ -1,4 +1,4 @@
-in as4cpx.maude
+load ../cpx.maude
 
 red (0,0,0,0) .
 red (0,0,0,1) .

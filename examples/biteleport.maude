@@ -1,4 +1,4 @@
-in ../as4qc.maude
+load ../qc.maude
 
 fmod BIDIRECTIONAL_TELEPORT is
     pr QC .

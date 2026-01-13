@@ -1,0 +1,145 @@
+==========================================
+reduce in QC : getVect([MCX(0 1, 2), |0>(x)|0>(x)|0>]) == |0>(x)|0>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(0 1, 2), |0>(x)|1>(x)|0>]) == |0>(x)|1>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(0 1, 2), |1>(x)|0>(x)|0>]) == |1>(x)|0>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(0 1, 2), |1>(x)|1>(x)|0>]) == |1>(x)|1>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(0 1, 2), |0>(x)|0>(x)|1>]) == |0>(x)|0>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(0 1, 2), |0>(x)|1>(x)|1>]) == |0>(x)|1>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(0 1, 2), |1>(x)|0>(x)|1>]) == |1>(x)|0>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(0 1, 2), |1>(x)|1>(x)|1>]) == |1>(x)|1>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(1 0, 2), |0>(x)|0>(x)|0>]) == |0>(x)|0>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(1 0, 2), |0>(x)|1>(x)|0>]) == |0>(x)|1>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(1 0, 2), |1>(x)|0>(x)|0>]) == |1>(x)|0>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(1 0, 2), |1>(x)|1>(x)|0>]) == |1>(x)|1>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(1 0, 2), |0>(x)|0>(x)|1>]) == |0>(x)|0>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(1 0, 2), |0>(x)|1>(x)|1>]) == |0>(x)|1>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(1 0, 2), |1>(x)|0>(x)|1>]) == |1>(x)|0>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(1 0, 2), |1>(x)|1>(x)|1>]) == |1>(x)|1>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(0 2, 1), |0>(x)|0>(x)|0>]) == |0>(x)|0>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(0 2, 1), |0>(x)|0>(x)|1>]) == |0>(x)|0>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(0 2, 1), |1>(x)|0>(x)|0>]) == |1>(x)|0>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(0 2, 1), |1>(x)|0>(x)|1>]) == |1>(x)|1>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(0 2, 1), |0>(x)|1>(x)|0>]) == |0>(x)|1>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(0 2, 1), |0>(x)|1>(x)|1>]) == |0>(x)|1>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(0 2, 1), |1>(x)|1>(x)|0>]) == |1>(x)|1>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(0 2, 1), |1>(x)|1>(x)|1>]) == |1>(x)|0>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(2 0, 1), |0>(x)|0>(x)|0>]) == |0>(x)|0>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(2 0, 1), |0>(x)|0>(x)|1>]) == |0>(x)|0>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(2 0, 1), |1>(x)|0>(x)|0>]) == |1>(x)|0>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(2 0, 1), |1>(x)|0>(x)|1>]) == |1>(x)|1>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(2 0, 1), |0>(x)|1>(x)|0>]) == |0>(x)|1>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(2 0, 1), |0>(x)|1>(x)|1>]) == |0>(x)|1>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(2 0, 1), |1>(x)|1>(x)|0>]) == |1>(x)|1>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(2 0, 1), |1>(x)|1>(x)|1>]) == |1>(x)|0>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(1 2, 0), |0>(x)|0>(x)|0>]) == |0>(x)|0>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(1 2, 0), |0>(x)|0>(x)|1>]) == |0>(x)|0>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(1 2, 0), |0>(x)|1>(x)|0>]) == |0>(x)|1>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(1 2, 0), |0>(x)|1>(x)|1>]) == |1>(x)|1>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(1 2, 0), |1>(x)|0>(x)|0>]) == |1>(x)|0>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(1 2, 0), |1>(x)|0>(x)|1>]) == |1>(x)|0>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(1 2, 0), |1>(x)|1>(x)|0>]) == |1>(x)|1>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(1 2, 0), |1>(x)|1>(x)|1>]) == |0>(x)|1>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(2 1, 0), |0>(x)|0>(x)|0>]) == |0>(x)|0>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(2 1, 0), |0>(x)|0>(x)|1>]) == |0>(x)|0>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(2 1, 0), |0>(x)|1>(x)|0>]) == |0>(x)|1>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(2 1, 0), |0>(x)|1>(x)|1>]) == |1>(x)|1>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(2 1, 0), |1>(x)|0>(x)|0>]) == |1>(x)|0>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(2 1, 0), |1>(x)|0>(x)|1>]) == |1>(x)|0>(x)|1> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(2 1, 0), |1>(x)|1>(x)|0>]) == |1>(x)|1>(x)|0> .
+result Bool: true
+==========================================
+reduce in QC : getVect([MCX(2 1, 0), |1>(x)|1>(x)|1>]) == |0>(x)|1>(x)|1> .
+result Bool: true
+Bye.

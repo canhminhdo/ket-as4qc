@@ -1,4 +1,4 @@
-in as4qc.maude
+load ../qc.maude
 
 red getVect([MCX(0 1, 2), |0> (x) |0> (x) |0>]) == (|0> (x) |0> (x) |0>) .
 red getVect([MCX(0 1, 2), |0> (x) |1> (x) |0>]) == (|0> (x) |1> (x) |0>) .

@@ -1,32 +1,35 @@
 ### An Algebraic Specification for Quantum Computation in Maude
 ---
-This repository presents |AS4QC>, an algebraic specification for quantum computation in Maude.
+This repository presents |AS4QC>, an algebraic specification for quantum computation in Maude, which provides a formal framework for modeling, symbolic and exact reasoning about, and verifying quantum systems.
 
 ## Dependencies
-- Maude is a programming/specification language based on rewriting logic. How to download and install Maude can be found at [here](http://maude.cs.illinois.edu/w/index.php/The_Maude_System).
+- Maude: A high-performance programming and specification language based on rewriting logic.\
+Installation instructions are available at [here](http://maude.cs.illinois.edu/w/index.php/The_Maude_System).
 
-## How to install
-- Clone the source code to your computer and go to the source code directory.
+## Usage
+1. Clone this repository and navigate to the project directory.
 
-- Feed a Maude file that is the formal specification of a protocol of interest into Maude.
+2. Load the formal specification |AS4QC> to automate reasoning about quantum computation.
 
-For example, we can type the following command in CLI to verify the correctness of Quantum Teleportation:
+3. Feed a Maude file that is the formal specification of a protocol of interest into Maude.
+
+For example, we can use the following command verify the correctness of Quantum Teleportation:
 
 ```console
 cd examples && maude teleport.maude
 ```
 
-- For testing, we can test the algebraic speicfication with some test cases provided as follows:
+For testing, we can validate the algebraic speicfication with some test cases as follows:
 
 ```console
 cd test && ./tester
 ```
 
 ## Repository structure
-- `cpx.maude` file for complex number reasoning.
+- `cpx.maude` for complex number reasoning.
 
-- `qc.maude` file for quantum computation reasoning.
+- `qc.maude` for quantum computation reasoning.
 
-- `examples` folder for case studies.
+- `examples` for case studies.
 
-- `test` folder for testing.
+- `test` for testing.
